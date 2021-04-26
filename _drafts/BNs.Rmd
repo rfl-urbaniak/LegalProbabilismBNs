@@ -1,8 +1,9 @@
 ---
 layout: page
+title: blah
 output:
   md_document:
-    variant: markdown_github
+    variant: gfm #markdown_github
     preserve_yaml: true
 ---
 
@@ -20,7 +21,7 @@ First, you need to install the relevant R libraries. This is a bit tricky, becau
 
 
 \footnotesize
-```{r}
+```{r, eval = FALSE }
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
 install.packages("BiocManager")
 if (!requireNamespace("BiocManager", quietly = TRUE))

@@ -1,8 +1,9 @@
 ---
 layout: page
+title: blah
 output:
   md_document:
-    variant: markdown_github
+    variant: gfm #markdown_github
     preserve_yaml: true
 ---
 
@@ -17,96 +18,14 @@ One way to go is this:
 
 ``` r
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
-```
-
-    ## Installing package into '/home/rafal/R/x86_64-pc-linux-gnu-library/3.6'
-    ## (as 'lib' is unspecified)
-
-``` r
 install.packages("BiocManager")
-```
-
-    ## Installing package into '/home/rafal/R/x86_64-pc-linux-gnu-library/3.6'
-    ## (as 'lib' is unspecified)
-
-``` r
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
-```
-
-    ## Bioconductor version '3.10' is out-of-date; the current release version '3.12'
-    ##   is available with R version '4.0'; see https://bioconductor.org/install
-
-``` r
 BiocManager::install()
-```
-
-    ## 'getOption("repos")' replaces Bioconductor standard repositories, see
-    ## '?repositories' for details
-    ## 
-    ## replacement repositories:
-    ##     CRAN: https://cloud.r-project.org
-
-    ## Bioconductor version 3.10 (BiocManager 1.30.12), R 3.6.3 (2020-02-29)
-
-    ## Installation paths not writeable, unable to update packages
-    ##   path: /usr/lib/R/library
-    ##   packages:
-    ##     boot, class, cluster, codetools, KernSmooth, lattice, MASS, Matrix, mgcv,
-    ##     nlme, nnet, spatial, survival
-    ##   path: /usr/lib/R/site-library
-    ##   packages:
-    ##     rstudioapi
-
-    ## Old packages: 'bitops', 'bookdown', 'brio', 'broom', 'callr', 'caTools',
-    ##   'cpp11', 'data.table', 'DBI', 'dbplyr', 'diffobj', 'dplyr', 'fastmap',
-    ##   'forcats', 'forecast', 'ggrepel', 'ggsignif', 'ggthemes', 'haven', 'highr',
-    ##   'hms', 'htmltools', 'httpuv', 'ipred', 'kableExtra', 'knitr', 'later',
-    ##   'lava', 'lubridate', 'maptools', 'MatrixModels', 'mime', 'parallelly',
-    ##   'pbkrtest', 'pillar', 'pracma', 'promises', 'quantreg', 'RcppArmadillo',
-    ##   'RcppParallel', 'recipes', 'reprex', 'rio', 'rmarkdown', 'rstatix', 'rvest',
-    ##   'shiny', 'slider', 'sp', 'SparseM', 'tibble', 'tidyr', 'tidyverse',
-    ##   'tinytex', 'V8', 'viridisLite', 'withr', 'zoo'
-
-``` r
 BiocManager::install(c("graph", "Rgraphviz"))
-```
 
-    ## 'getOption("repos")' replaces Bioconductor standard repositories, see
-    ## '?repositories' for details
-    ## 
-    ## replacement repositories:
-    ##     CRAN: https://cloud.r-project.org
-
-    ## Bioconductor version 3.10 (BiocManager 1.30.12), R 3.6.3 (2020-02-29)
-
-    ## Installing package(s) 'graph', 'Rgraphviz'
-
-    ## Installation paths not writeable, unable to update packages
-    ##   path: /usr/lib/R/library
-    ##   packages:
-    ##     boot, class, cluster, codetools, KernSmooth, lattice, MASS, Matrix, mgcv,
-    ##     nlme, nnet, spatial, survival
-    ##   path: /usr/lib/R/site-library
-    ##   packages:
-    ##     rstudioapi
-
-    ## Old packages: 'bitops', 'bookdown', 'brio', 'broom', 'callr', 'caTools',
-    ##   'cpp11', 'data.table', 'DBI', 'dbplyr', 'diffobj', 'dplyr', 'fastmap',
-    ##   'forcats', 'forecast', 'ggrepel', 'ggsignif', 'ggthemes', 'haven', 'highr',
-    ##   'hms', 'htmltools', 'httpuv', 'ipred', 'kableExtra', 'knitr', 'later',
-    ##   'lava', 'lubridate', 'maptools', 'MatrixModels', 'mime', 'parallelly',
-    ##   'pbkrtest', 'pillar', 'pracma', 'promises', 'quantreg', 'RcppArmadillo',
-    ##   'RcppParallel', 'recipes', 'reprex', 'rio', 'rmarkdown', 'rstatix', 'rvest',
-    ##   'shiny', 'slider', 'sp', 'SparseM', 'tibble', 'tidyr', 'tidyverse',
-    ##   'tinytex', 'V8', 'viridisLite', 'withr', 'zoo'
-
-``` r
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
 ```
-
-    ## Installing package into '/home/rafal/R/x86_64-pc-linux-gnu-library/3.6'
-    ## (as 'lib' is unspecified)
 
 Then load the libraries we use (you need to have them installed first):
 
@@ -131,27 +50,28 @@ presentation of BNs, and then go over a few main methods of employing
 BNs in presentation, aggregation and evaluation of evidence in legal
 fact-finding.
 
-A (RV) *X* is a function from the elements of a sample space into ℝ, the
-set of real numbers. For instance, if our sample space is the set of all
-potential outcomes of tossing a fair coin four times (each such outcome
-can be represented as a sequence, for instance *H**H**H**T*, or
-*H**T**H**T*), *X* can be the number of heads among the tosses.
+A  (RV) \(X\) is a function from the elements of a sample space into
+\(\mathbb{R}\), the set of real numbers. For instance, if our sample
+space is the set of all potential outcomes of tossing a fair coin four
+times (each such outcome can be represented as a sequence, for instance
+\(HHHT\), or \(HTHT\)), \(X\) can be the number of heads among the
+tosses.
 
-Given a probability measure $\\pr$, two events *A* and *B* are
-conditionally independent given another event *C*,
-$I\_{\\pr}(A,B\\vert C)$, just in case
-$\\pr(A\\et B\\vert C) = \\pr(A\\vert C)\\pr(B \\vert C)$. Conditional
-and unconditional independence don’t have to coincide. If you toss twice
-a coin which is fair with probability $\\nicefrac{1}{2}$, and
-$\\nicefrac{3}{4}$ biased towards heads with probability
-$\\nicefrac{1}{2}$, the result of the second toss is not independent of
+Given a probability measure \(\pr\), two events \(A\) and \(B\) are
+conditionally independent given another event \(C\),
+\(I_{\pr}(A,B\vert C)\), just in case
+\(\pr(A\et B\vert C) = \pr(A\vert C)\pr(B \vert C)\). Conditional and
+unconditional independence don’t have to coincide. If you toss twice a
+coin which is fair with probability \(\nicefrac{1}{2}\), and
+\(\nicefrac{3}{4}\) biased towards heads with probability
+\(\nicefrac{1}{2}\), the result of the second toss is not independent of
 the first one. After all, if the first result is heads, this increases
 the probability that the coin is biased, and so increases the
 probability of heads in the second toss. On the other hand,
 conditionally on knowledge whether the coin is fair, the results are
 independent. If the coin is fair, the probability of heads in the second
-toss is $\\nicefrac{1}{2}$ and if the coin is biased, it is
-$\\nicefrac{3}{4}$, no matter what the first result was. And in the
+toss is \(\nicefrac{1}{2}\) and if the coin is biased, it is
+\(\nicefrac{3}{4}\), no matter what the first result was. And in the
 opposite direction, indepedence can disappear when we condition. Say I
 have two friends, Alice and Peter, who call me regularly, but they
 decide to do so independently. Then, whether they call in five minutes
@@ -159,39 +79,38 @@ is independent. Now, suppose the phone rings. Conditional on the phone
 ringing, I know that if it isn’t Alice, it’s Peter, and so the
 identities of the callers are no longer independent.
 
-Two RVs *X* and *Y* are conditonally independent given another RV *Z*,
-$I\_{\\pr}(X,Y\\vert Z)$ just in case for any combination of values of
-these RVs *x*, *y*, *z* it is the case that
-$I\_{\\pr}(X=x \\et Y=y \\vert Z=z)$ (notice: *X*, *Y* and *Z* are RVs,
-while *x*, *y* and *z* are some particular values they can take). The
+Two RVs \(X\) and \(Y\) are conditonally independent given another RV
+\(Z\), \(I_{\pr}(X,Y\vert Z)\) just in case for any combination of
+values of these RVs \(x,y,z\) it is the case that
+\(I_{\pr}(X=x \et Y=y \vert Z=z)\) (notice: \(X,Y\) and \(Z\) are RVs,
+while \(x,y\) and \(z\) are some particular values they can take). The
 notion naturally generalizes to sets of RVs. Often, instead of saying
-things like $\\pr(X\_1 = x\_1\\et Y\_5=y\_5 \\vert Z\_3=z\_3)$ we’ll
-rather say $\\pr(x\_1,y\_5\\vert z\_3)$.
+things like \(\pr(X_1 = x_1\et Y_5=y_5 \vert Z_3=z_3)\) we’ll rather say
+\(\pr(x_1,y_5\vert z_3)\).
 
-Now, if we have *n* RVs, even if we assume for simplicity that they’re
+Now, if we have \(n\) RVs, even if we assume for simplicity that they’re
 binary (that is, they can take only one of two values), there are
-2<sup>*n*</sup> possible combinations of values they could take, and so
-a direct description of a probability measure for them would require
-2<sup>*n*</sup> − 1 numbers. This would be a highly unfeasible method of
-specifying a probability distribution for a set of random variables.
+\(2^n\) possible combinations of values they could take, and so a direct
+description of a probability measure for them would require \(2^n-1\)
+numbers. This would be a highly unfeasible method of specifying a
+probability distribution for a set of random variables.
 
 Moreover, even if we had specified the joint probability distribution
-for all our combinations of values of Rvs *X*, *Y*, *Z*, using it
-wouldn’t be the most efficient way of calculating conditional
-probabilities or the probability that a certain selected RV takes a
-certain particular value. For instance, we would have to rely on: in
-which calculations we’d have to travel through all possible values of
-*Z* and *X* – this would become even less feasible as the number of RVs
-and their possible values increase. With 100 binary RVs we’d need 2^{99}
-terms in the sum in the denominator, so it seems that to be able to
-calculate a single conditional probability we’d have to elicit quite a
-few uncoditional ones.
+for all our combinations of values of Rvs \(X, Y, Z\), using it wouldn’t
+be the most efficient way of calculating conditional probabilities or
+the probability that a certain selected RV takes a certain particular
+value. For instance, we would have to rely on:  in which calculations
+we’d have to travel through all possible values of \(Z\) and \(X\) –
+this would become even less feasible as the number of RVs and their
+possible values increase. With 100 binary RVs we’d need 2^{99} terms in
+the sum in the denominator, so it seems that to be able to calculate a
+single conditional probability we’d have to elicit quite a few
+uncoditional ones.
 
 Instead, we start with representing dependencies between RVs in such a
-set by means of a (DAG). A DAG is a collection of (called also ) – think
-of them as corresponding to the RVs, (also called ; they can be thought
-of as ordered pairs of nodes), such that there is no sequence of nodes
-*v*<sub>0</sub>, …, *v*<sub>*k*</sub> with edges from *v*<sub>*i*</sub>
-to *v*<sub>*i* + 1</sub> for 0 ≤ *i* ≤ *k* − 1 with
-*v*<sub>0</sub> = *v*<sub>*k*</sub>. A (QBN) is a DAG with nodes labeled
-by RVs. Here’s one example of a QBN:
+set by means of a  (DAG). A DAG is a collection of  (called also ) –
+think of them as corresponding to the RVs,  (also called ; they can be
+thought of as ordered pairs of nodes), such that there is no sequence of
+nodes \(v_0,\dots, v_k\) with edges from \(v_i\) to \(v_{i+1}\) for
+\(0\leq i\leq k-1\) with \(v_0=v_k\). A  (QBN) is a DAG with nodes
+labeled by RVs. Here’s one example of a QBN:
