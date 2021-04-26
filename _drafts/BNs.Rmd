@@ -2,14 +2,16 @@
 layout: page
 title: blah
 output:
-  md_document:
-    variant: markdown_github
-    preserve_yaml: true
+  github_document:
+    pandoc_args: --webtex
+  #  md_document:
+#    variant: markdown_github
+  preserve_yaml: true
 ---
 
 ```{r , echo = FALSE, eval = TRUE}
-knitr::opts_knit$set(base.dir = "/home/rafal/L2/L2projects/LegalProbabilismBNs", base.url = "https://rfl-urbaniak.github.io/LegalProbabilismBNs/")
-knitr::opts_chunk$set(fig.path = "images/")
+#knitr::opts_knit$set(base.dir = "/home/rafal/L2/L2projects/LegalProbabilismBNs", base.url = "https://rfl-urbaniak.github.io/LegalProbabilismBNs/")
+#knitr::opts_chunk$set(fig.path = "images/")
 ```
 
 
@@ -49,41 +51,9 @@ While Bayes's Theorem is of immense use when it comes to calculating various con
 
 
 
-\section{Bayesian Networks: a crashcourse}
-
-A \emph{random variable} (RV) $X$ is a function from the elements of a sample space into $\mathbb{R}$, the set of real numbers. For instance, if our sample space is the set of all potential outcomes of tossing a fair coin four times (each such outcome can be represented as a sequence, for instance  $HHHT$, or $HTHT$), $X$ can be the number of heads among the tosses.  
-
-Given a probability measure $P$, two events $A$ and $B$ are conditionally independent given another event $C$, $I_{P}(A,B\vert C)$, just in case $P(A\wedge B\vert C) = P(A\vert C)P(B \vert C)$. Conditional and unconditional independence don't have to coincide. If you toss twice a coin which is fair with probability $\frac{1}{2}$, and $\frac{3}{4}$ biased towards heads with probability $\frac{1}{2}$, the result of the second toss is not independent of the first one. After all, if the first result is heads, this increases the probability that the coin is biased, and so increases the probability of heads in the second toss. On the other hand, conditionally on knowledge whether the coin is fair, the results are independent. If the coin is fair, the probability of heads in the second toss is $\frac{1}{2}$ and if the coin is biased, it is $\frac{3}{4}$, no matter what the first result was. And in the opposite direction, indepedence can disappear when we condition. Say I have two friends, Alice and Peter, who call me regularly, but they decide to do so independently. Then, whether they call in five minutes is independent. Now, suppose the phone rings. Conditional on the phone ringing, I know that if it isn't Alice, it's Peter, and so the identities of the callers are no longer independent. 
 
 
-
-
-
-Two RVs $X$ and $Y$ are conditonally independent given another RV $Z$, $I_{P}(X,Y\vert Z)$ just in case for any combination of values of these RVs $x,y,z$ it is the case that $I_{P}(X=x \wedge Y=y \vert Z=z)$ (notice: $X,Y$ and $Z$ are RVs, while $x,y$ and $z$ are some particular values they can take). The notion naturally generalizes to sets of RVs.
-Often, instead of saying things like $P(X_1 = x_1\wedge Y_5=y_5 \vert Z_3=z_3)$ we'll rather say $P(x_1,y_5\vert z_3)$.  
-
-
-Now, if we have $n$ RVs, even if we assume for simplicity that they're binary (that is, they can take only one of two values), there are $2^n$ possible combinations of values they could take, and so a direct description of a probability measure for them would require $2^n-1$ numbers. This would be a highly unfeasible method of specifying a probability distribution for a set of random variables. 
-
-
-
-Moreover, even if we had specified the joint probability distribution for all our combinations of values of Rvs $X, Y, Z$, using it wouldn't be the most efficient way of calculating conditional probabilities or the probability that a certain selected RV takes a certain particular value. For instance, we would have to rely on:
-\begin{align*} 
-xP(x_1\vert y_1) & =  \frac{P{x_1,y_1}}{P{y_1}} \\ &  = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
-\sum_{i,j}P(X=x_j,y_1,Z=Z_i)
-} 
-\end{align*}
-\noindent in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need 2^{99} terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few uncoditional ones. 
-
-\normalsize
-
-
-Instead, we start with representing dependencies between RVs in such a set by means of a \emph{directed acyclic graph} (DAG). A DAG is a collection of \emph{nodes} (called also \emph{vertices}) -- think of them as corresponding to the RVs, \emph{directed edges} (also called \emph{arcs}; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$.\footnote{Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.} A \emph{qualitative BN} (QBN) is a DAG with nodes labeled by RVs. Here's one example of a QBN:
-
-
-
-
-```{r,echo=TRUE,eval=TRUE, fig.width=2, fig.height=2, fig.align = "center",cache=TRUE}
+```{r cancer,echo=TRUE,eval=TRUE, fig.width=2, fig.height=2, fig.align = "center",cache=TRUE}
 cancer1 <- empty.graph(nodes = c("PS","SH","S","C"))
 cancer1.arcs <- matrix(c("PS", "SH",
                    "PS", "S",
@@ -96,117 +66,12 @@ graphviz.plot(cancer1)
 ```
 
 
+This can be achieved in a somewhat simpler manner like this:
 
-\footnotesize
-\begin{center}
-\begin{tabular}{@{}lp{4.3cm}@{}}\toprule
-RV & Proposition \\ \midrule 
-PS & At least one parent smokes. \\
-SH & The subject is a second-hand smoker.\\
-S & The subject smokes.\\
-C & The subject develops cancer. \\ \bottomrule
-\end{tabular}
-\end{center}
-
-
------  ------------------------------
-RV     Proposition
------  ----------------------------
-PS     At least one parent smokes.
-
-SH     The subject is a second-hand smoker.
-
-S      The subject smokes.
-
-C      The subject develops cancer.
-----   ------------------------------------
-
-
-
-
-Looking at our examples, one possible combination of CPTs is:
-
-
-\begin{center}
-\begin{tabular}{@{}l@{}}\toprule
-PS \\ \midrule
-0.3 \\ \bottomrule
-\end{tabular} \hspace{3mm}
-\begin{tabular}{@{}ll@{}}
-\toprule PS & S\\
-\midrule
-1 & 0.4 \\
-0 & 0.2 \\
-\bottomrule
-\end{tabular}
-\hspace{3mm}
-\begin{tabular}{@{}ll@{}}
-\toprule PS & SH\\
-\midrule
-1 & 0.8 \\
-0 & 0.3 \\
-\bottomrule
-\end{tabular}\hspace{3mm}
-\begin{tabular}{@{}lll@{}}
-\toprule S & SH & C\\
-\midrule
-1 & 1& 0.6 \\
-1 & 0& 0.4 \\
-0 & 1& 0.1 \\
-0 & 0& 0.01 \\
-\bottomrule
-\end{tabular}
-
-\end{center}
-
-
-
-
-
-In contrast, BN representation significantly simplifies the information that needs to be stored and calculated. If RVs are binary and each node has at most $k$ parents, at most $2^kn$ values are needed to determine the distribution.
-
-
-
-Continuing our example, we now only need to assign prior probabilities to parentless nodes and *conditional probability tables* (CPTs) to edges. If $X$ has $m$ possible states and is the parent of $Y$ with $n$ possible states, the CPTs for their connection is an $m\times n$ table containing conditional probabilities for $\pr(Y= y\vert X=x)$. In general, once we have defined CPTs for each node given its parents, the product of these conditional probabilities yields a joint probability distribution satisfying the Markov condition, if we're dealing with discrete RVs (the claim also holds for normally distributed RVs, but not universally for any type of continuous RVs).
-
-
-
-
-
-## Whence simplicity?
-
-This is a somewhat more technical explanation of how BNs help in reducing complexity. An uninterested reader can skip ahead. 
-
-The \emph{chain rule} tells us that $\pr(A\wedge B) = \pr(A\vert B)\pr(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
-\begin{align}
-\label{eq:chainRV}
-\pr(x_1,\cdots,x_n) & = \pr(x_n\vert x_1,\cdots,x_{n-1})\times \\ \nonumber
-& \pr(x_{n-1}\vert x_1,\cdots,x_{n-2})\times \\ \nonumber
-& \times \cdots \times \pr(x_2 \vert x_1) \pr(x_1)
-\end{align}
-
-So, if $\pr$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $\pr(X_1\dots,X_n)$ (note: this is really an assignment of probability values to \emph{all} possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side of \eqref{eq:chainRV}, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them. 
-Let's slow down and take a look at the argument. Pick an ancestral ordering $X_1, \dots, X_n$, of the RVs, that is, an ordering in which if $Z$ is a descendant of $X$, $Z$ follows $Y$ in the ordering. Take any selection of values of these variables, $x_1, \dots, x_n$. Let $\mathsf{pa_i}$ be the set cotaining all the values of the parents of $X_i$ that belong to this sequence. Since this is an ancestral ordering, the parents have to occur before $x_i$. We need to prove \scriptsize
-\begin{align}\pr(x_n, x_{n-1}, \dots, x_1) = \pr(x_n\vert \mathsf{pa_n})\pr(x_{n-1}\vert \mathsf{pa_{n-1}})\cdots \pr(x_1)\label{eq:markoproof1}\end{align} \footnotesize
-We prove it by induction on the length of the sequence. The basic case comes for free. Now assume: \scriptsize
-\begin{align}\pr(x_i, x_{i-1}, \dots, x_1 = \pr(x_i\vert \mathsf{pa_i})\pr(x_{i-1}\vert \mathsf{pa_{i-1}})\cdots \pr(x_1)\label{eq:markoproof2}\end{align} \footnotesize
-\noindent we need to show: \scriptsize
-\begin{align}\pr(x_{i+1}, x_{i}, \dots, x_1) = \pr(x_{i+1}\vert \mathsf{pa_{i+1}})\pr(x_{i}\vert \mathsf{pa_{i}})\cdots \pr(x_1)\label{eq:markoproof3}\end{align}\footnotesize
-One option is that $\pr(x_i,x_{i-1},\dots,x)=0$. Then, also  $\pr(x_{i+1}, x_{i}, \dots, x_1)=0$, and by the induction hypothesis, there is a $1\leq k\leq i$ such that $\pr(x_k\vert \mathsf{pa_k})=0$, and so also the right-hand side of \eqref{eq:markoproof3} equals 0 and so \eqref{eq:markoproof3} holds.
-
-Another option is that  $\pr(x_i,x_{i-1},\dots,x)\neq 0$.
-Then we reason: \scriptsize
-\begin{align*}\pr(x_{i+1}, x_{i}, \dots, x_1) &= \pr(x_{i+1}\vert x_i, \dots, x_1) \pr(x_i, \dots, x_1)\\
-& = \pr(x_{i+1}\vert \mathsf{pa_{i+1}}) \pr(x_i, \dots, x_1)\\
-& = \pr(x_{i+1}\vert \mathsf{pa_{i+1}})  \pr(x_{i}\vert \mathsf{pa_{i}})\cdots \pr(x_1)\end{align*}\footnotesize 
-
-
-\noindent The first step is by the chain rule. The second is by the Markov  condition and the fact that we employed an ancestral ordering. The third one uses \eqref{eq:markoproof2}. This ends the proof. 
-
-
-Now, why  does the product of CPTs yield a joint probability distribution satisfying the Markov condition, if we're dealing with discrete RVs?
-
-
+```{r cancerSimpler, fig.width=2, fig.height=2, fig.align = "center",cache=TRUE}
+cancer2DAG <- model2network("[SH|PS][PS][S|PS][C|SH:S]")
+graphviz.plot(cancer2DAG)
+```
 
 
 
