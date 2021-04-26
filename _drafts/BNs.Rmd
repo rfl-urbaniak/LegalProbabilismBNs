@@ -12,15 +12,15 @@ knitr::opts_chunk$set(fig.path = "/_images/")
 ```
 
 
-## Set-up
+### Set-up
 
-The examples are given in R code, which we intertwine with additional explanations, which the reader is welcome to skip if it looks familiar. 
+The examples are given in R code, which we intertwine with additional explanations, which the reader is welcome to skip if they look familiar. 
 
 First, you need to install the relevant R libraries. This is a bit tricky, because some of them have to be installed through BiocManager. One way to go is this:
 
 
 \footnotesize
-```{r, eval = FALSE}
+```{r}
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
 install.packages("BiocManager")
 if (!requireNamespace("BiocManager", quietly = TRUE))

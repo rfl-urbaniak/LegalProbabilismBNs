@@ -6,11 +6,10 @@ output:
     preserve_yaml: true
 ---
 
-Set-up
-------
+### Set-up
 
 The examples are given in R code, which we intertwine with additional
-explanations, which the reader is welcome to skip if it looks familiar.
+explanations, which the reader is welcome to skip if they look familiar.
 
 First, you need to install the relevant R libraries. This is a bit
 tricky, because some of them have to be installed through BiocManager.
@@ -18,14 +17,96 @@ One way to go is this:
 
 ``` r
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
+```
+
+    ## Installing package into '/home/rafal/R/x86_64-pc-linux-gnu-library/3.6'
+    ## (as 'lib' is unspecified)
+
+``` r
 install.packages("BiocManager")
+```
+
+    ## Installing package into '/home/rafal/R/x86_64-pc-linux-gnu-library/3.6'
+    ## (as 'lib' is unspecified)
+
+``` r
 if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
-BiocManager::install()
-BiocManager::install(c("graph", "Rgraphviz"))
+```
 
+    ## Bioconductor version '3.10' is out-of-date; the current release version '3.12'
+    ##   is available with R version '4.0'; see https://bioconductor.org/install
+
+``` r
+BiocManager::install()
+```
+
+    ## 'getOption("repos")' replaces Bioconductor standard repositories, see
+    ## '?repositories' for details
+    ## 
+    ## replacement repositories:
+    ##     CRAN: https://cloud.r-project.org
+
+    ## Bioconductor version 3.10 (BiocManager 1.30.12), R 3.6.3 (2020-02-29)
+
+    ## Installation paths not writeable, unable to update packages
+    ##   path: /usr/lib/R/library
+    ##   packages:
+    ##     boot, class, cluster, codetools, KernSmooth, lattice, MASS, Matrix, mgcv,
+    ##     nlme, nnet, spatial, survival
+    ##   path: /usr/lib/R/site-library
+    ##   packages:
+    ##     rstudioapi
+
+    ## Old packages: 'bitops', 'bookdown', 'brio', 'broom', 'callr', 'caTools',
+    ##   'cpp11', 'data.table', 'DBI', 'dbplyr', 'diffobj', 'dplyr', 'fastmap',
+    ##   'forcats', 'forecast', 'ggrepel', 'ggsignif', 'ggthemes', 'haven', 'highr',
+    ##   'hms', 'htmltools', 'httpuv', 'ipred', 'kableExtra', 'knitr', 'later',
+    ##   'lava', 'lubridate', 'maptools', 'MatrixModels', 'mime', 'parallelly',
+    ##   'pbkrtest', 'pillar', 'pracma', 'promises', 'quantreg', 'RcppArmadillo',
+    ##   'RcppParallel', 'recipes', 'reprex', 'rio', 'rmarkdown', 'rstatix', 'rvest',
+    ##   'shiny', 'slider', 'sp', 'SparseM', 'tibble', 'tidyr', 'tidyverse',
+    ##   'tinytex', 'V8', 'viridisLite', 'withr', 'zoo'
+
+``` r
+BiocManager::install(c("graph", "Rgraphviz"))
+```
+
+    ## 'getOption("repos")' replaces Bioconductor standard repositories, see
+    ## '?repositories' for details
+    ## 
+    ## replacement repositories:
+    ##     CRAN: https://cloud.r-project.org
+
+    ## Bioconductor version 3.10 (BiocManager 1.30.12), R 3.6.3 (2020-02-29)
+
+    ## Installing package(s) 'graph', 'Rgraphviz'
+
+    ## Installation paths not writeable, unable to update packages
+    ##   path: /usr/lib/R/library
+    ##   packages:
+    ##     boot, class, cluster, codetools, KernSmooth, lattice, MASS, Matrix, mgcv,
+    ##     nlme, nnet, spatial, survival
+    ##   path: /usr/lib/R/site-library
+    ##   packages:
+    ##     rstudioapi
+
+    ## Old packages: 'bitops', 'bookdown', 'brio', 'broom', 'callr', 'caTools',
+    ##   'cpp11', 'data.table', 'DBI', 'dbplyr', 'diffobj', 'dplyr', 'fastmap',
+    ##   'forcats', 'forecast', 'ggrepel', 'ggsignif', 'ggthemes', 'haven', 'highr',
+    ##   'hms', 'htmltools', 'httpuv', 'ipred', 'kableExtra', 'knitr', 'later',
+    ##   'lava', 'lubridate', 'maptools', 'MatrixModels', 'mime', 'parallelly',
+    ##   'pbkrtest', 'pillar', 'pracma', 'promises', 'quantreg', 'RcppArmadillo',
+    ##   'RcppParallel', 'recipes', 'reprex', 'rio', 'rmarkdown', 'rstatix', 'rvest',
+    ##   'shiny', 'slider', 'sp', 'SparseM', 'tibble', 'tidyr', 'tidyverse',
+    ##   'tinytex', 'V8', 'viridisLite', 'withr', 'zoo'
+
+``` r
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
 ```
+
+    ## Installing package into '/home/rafal/R/x86_64-pc-linux-gnu-library/3.6'
+    ## (as 'lib' is unspecified)
 
 Then load the libraries we use (you need to have them installed first):
 
