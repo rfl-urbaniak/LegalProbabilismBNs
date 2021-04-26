@@ -128,3 +128,34 @@ graphviz.plot(cancer1)
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+
+<table style="width:50%;">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">RV</th>
+<th style="text-align: left;">Proposition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PS</td>
+<td style="text-align: left;">At least one parent smokes.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SH</td>
+<td style="text-align: left;">The subject is a second-hand smoker.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">S</td>
+<td style="text-align: left;">The subject smokes.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">The subject develops cancer.</td>
+</tr>
+</tbody>
+</table>

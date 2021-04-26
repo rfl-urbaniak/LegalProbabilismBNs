@@ -109,4 +109,14 @@ C & The subject develops cancer. \\ \bottomrule
 \end{center}
 
 
+-----  ------------------------------
+RV     Proposition
+-----  ----------------------------
+PS     At least one parent smokes.
 
+SH     The subject is a second-hand smoker.
+
+S      The subject smokes.
+
+C      The subject develops cancer.
+----   ------------------------------------
