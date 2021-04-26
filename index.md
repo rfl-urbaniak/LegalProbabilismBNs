@@ -1,16 +1,18 @@
 ---
 layout: page
-title: Bayesian Networks for the Legal Probabilism SEP entry
+#title: Bayesian Networks for the Legal Probabilism SEP entry
 output:
   md_document:
     variant: markdown_github
     preserve_yaml: true
 ---
 
-### Set-up
-
 The examples are given in R code, which we intertwine with additional
 explanations, which the reader is welcome to skip if they look familiar.
+
+
+### Set-up
+
 
 First, you need to install the relevant R libraries. This is a bit
 tricky, because some of them have to be installed through BiocManager.
