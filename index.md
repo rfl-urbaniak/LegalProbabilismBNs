@@ -63,14 +63,13 @@ Now, if we have $n$ RVs, even if we assume for simplicity that they're binary (t
 
 
 Moreover, even if we had specified the joint probability distribution for all our combinations of values of Rvs $X, Y, Z$, using it wouldn't be the most efficient way of calculating conditional probabilities or the probability that a certain selected RV takes a certain particular value. For instance, we would have to rely on:
-\begin{align*}
-xP(x_1\vert y_1) & =  \frac{P{x_1,y_1}}{P{y_1}} \\ &  = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
+$$
+xP(x_1\vert y_1)  =  \frac{P{x_1,y_1}}{P{y_1}} \\ &  = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
 \sum_{i,j}P(X=x_j,y_1,Z=Z_i)
 }
-\end{align*}
+$$
 \noindent in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need 2^{99} terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few uncoditional ones.
 
-\normalsize
 
 
 Instead, we start with representing dependencies between RVs in such a set by means of a \emph{directed acyclic graph} (DAG). A DAG is a collection of \emph{nodes} (called also \emph{vertices}) -- think of them as corresponding to the RVs, \emph{directed edges} (also called \emph{arcs}; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$.\footnote{Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.} A \emph{qualitative BN} (QBN) is a DAG with nodes labeled by RVs. Here's one example of a QBN:
