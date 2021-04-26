@@ -57,21 +57,20 @@ times (each such outcome can be represented as a sequence, for instance
 \(HHHT\), or \(HTHT\)), \(X\) can be the number of heads among the
 tosses.
 
-Given a probability measure \(\pr\), two events \(A\) and \(B\) are
+Given a probability measure \(P\), two events \(A\) and \(B\) are
 conditionally independent given another event \(C\),
-\(I_{\pr}(A,B\vert C)\), just in case
-\(\pr(A\et B\vert C) = \pr(A\vert C)\pr(B \vert C)\). Conditional and
+\(I_{P}(A,B\vert C)\), just in case
+\(P(A\et B\vert C) = P(A\vert C)P(B \vert C)\). Conditional and
 unconditional independence don’t have to coincide. If you toss twice a
-coin which is fair with probability \(\nicefrac{1}{2}\), and
-\(\nicefrac{3}{4}\) biased towards heads with probability
-\(\nicefrac{1}{2}\), the result of the second toss is not independent of
-the first one. After all, if the first result is heads, this increases
-the probability that the coin is biased, and so increases the
-probability of heads in the second toss. On the other hand,
-conditionally on knowledge whether the coin is fair, the results are
-independent. If the coin is fair, the probability of heads in the second
-toss is \(\nicefrac{1}{2}\) and if the coin is biased, it is
-\(\nicefrac{3}{4}\), no matter what the first result was. And in the
+coin which is fair with probability \(\frac{1}{2}\), and \(\frac{3}{4}\)
+biased towards heads with probability \(\frac{1}{2}\), the result of the
+second toss is not independent of the first one. After all, if the first
+result is heads, this increases the probability that the coin is biased,
+and so increases the probability of heads in the second toss. On the
+other hand, conditionally on knowledge whether the coin is fair, the
+results are independent. If the coin is fair, the probability of heads
+in the second toss is \(\frac{1}{2}\) and if the coin is biased, it is
+\(\frac{3}{4}\), no matter what the first result was. And in the
 opposite direction, indepedence can disappear when we condition. Say I
 have two friends, Alice and Peter, who call me regularly, but they
 decide to do so independently. Then, whether they call in five minutes
@@ -80,13 +79,13 @@ ringing, I know that if it isn’t Alice, it’s Peter, and so the
 identities of the callers are no longer independent.
 
 Two RVs \(X\) and \(Y\) are conditonally independent given another RV
-\(Z\), \(I_{\pr}(X,Y\vert Z)\) just in case for any combination of
-values of these RVs \(x,y,z\) it is the case that
-\(I_{\pr}(X=x \et Y=y \vert Z=z)\) (notice: \(X,Y\) and \(Z\) are RVs,
+\(Z\), \(I_{P}(X,Y\vert Z)\) just in case for any combination of values
+of these RVs \(x,y,z\) it is the case that
+\(I_{P}(X=x \et Y=y \vert Z=z)\) (notice: \(X,Y\) and \(Z\) are RVs,
 while \(x,y\) and \(z\) are some particular values they can take). The
 notion naturally generalizes to sets of RVs. Often, instead of saying
-things like \(\pr(X_1 = x_1\et Y_5=y_5 \vert Z_3=z_3)\) we’ll rather say
-\(\pr(x_1,y_5\vert z_3)\).
+things like \(P(X_1 = x_1\et Y_5=y_5 \vert Z_3=z_3)\) we’ll rather say
+\(P(x_1,y_5\vert z_3)\).
 
 Now, if we have \(n\) RVs, even if we assume for simplicity that they’re
 binary (that is, they can take only one of two values), there are
