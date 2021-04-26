@@ -73,7 +73,11 @@ $$xP(x_1\vert y_1)  =  \frac{P{x_1,y_1}}{P{y_1}}   = \frac{\sum_{i}P(x_1,y_1,Z=z
 
 
 
-Instead, we start with representing dependencies between RVs in such a set by means of a *directed acyclic graph* (DAG). A DAG is a collection of *nodes* (called also *vertices*) -- think of them as corresponding to the RVs, *directed edges* (also called *arcs*; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$. (Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.) A *qualitative BN* (QBN) is a DAG with nodes labeled by RVs. Here's one example of a QBN:
+Instead, we start with representing dependencies between RVs in such a set by means of a *directed acyclic graph* (DAG). A DAG is a collection of *nodes* (called also *vertices*) -- think of them as corresponding to the RVs, *directed edges* (also called *arcs*; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$. (Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.) A *qualitative BN* (QBN) is a DAG with nodes labeled by RVs.
+
+### An example with R
+
+Here's one example of a QBN:
 
 
 
@@ -132,9 +136,12 @@ The edges, intuitively, are meant to capture direct influence between RVs. The r
 
 
 
+
+
+
 ## Whence simplicity?
 
-This is a somewhat more technical explanation of how BNs help in reducing complexity. An uninterested reader can skip ahead.
+This is a somewhat more technical explanation of how BNs help in reducing complexity. An uninterested reader can skip it.
 
 First, the *chain rule* tells us that $P(A\wedge B) = P(A\vert B)P(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
 
@@ -227,9 +234,11 @@ Now, the sums in the fractions sum both to 1 (for reasons clear from the previou
   )\cdots P(\widehat{x}_1)
   $$
 
-    are both in the numerator and the denominator, so we are left with
+are both in the numerator and the denominator, so we are left with
 
-    $$P(\widehat{x}_{k}
-      \vert \mathsf{\widehat{pa}_{k}})$$
+$$
+P(\widehat{x}_{k}
+    \vert \mathsf{\widehat{pa}_{k}})
+$$
 
-       as desired.
+as desired.

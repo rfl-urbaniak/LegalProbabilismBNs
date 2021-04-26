@@ -124,6 +124,43 @@ C      The subject develops cancer.
 
 
 
+Looking at our examples, one possible combination of CPTs is:
+
+
+\begin{center}
+\begin{tabular}{@{}l@{}}\toprule
+PS \\ \midrule
+0.3 \\ \bottomrule
+\end{tabular} \hspace{3mm}
+\begin{tabular}{@{}ll@{}}
+\toprule PS & S\\
+\midrule
+1 & 0.4 \\
+0 & 0.2 \\
+\bottomrule
+\end{tabular}
+\hspace{3mm}
+\begin{tabular}{@{}ll@{}}
+\toprule PS & SH\\
+\midrule
+1 & 0.8 \\
+0 & 0.3 \\
+\bottomrule
+\end{tabular}\hspace{3mm}
+\begin{tabular}{@{}lll@{}}
+\toprule S & SH & C\\
+\midrule
+1 & 1& 0.6 \\
+1 & 0& 0.4 \\
+0 & 1& 0.1 \\
+0 & 0& 0.01 \\
+\bottomrule
+\end{tabular}
+
+\end{center}
+
+
+
 
 
 In contrast, BN representation significantly simplifies the information that needs to be stored and calculated. If RVs are binary and each node has at most $k$ parents, at most $2^kn$ values are needed to determine the distribution.

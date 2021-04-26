@@ -160,8 +160,29 @@ graphviz.plot(cancer1)
 </tbody>
 </table>
 
+Looking at our examples, one possible combination of CPTs is:
+
+In contrast, BN representation significantly simplifies the information
+that needs to be stored and calculated. If RVs are binary and each node
+has at most *k* parents, at most 2<sup>*k*</sup>*n* values are needed to
+determine the distribution.
+
+Continuing our example, we now only need to assign prior probabilities
+to parentless nodes and *conditional probability tables* (CPTs) to
+edges. If *X* has *m* possible states and is the parent of *Y* with *n*
+possible states, the CPTs for their connection is an *m* × *n* table
+containing conditional probabilities for $\\pr(Y= y\\vert X=x)$. In
+general, once we have defined CPTs for each node given its parents, the
+product of these conditional probabilities yields a joint probability
+distribution satisfying the Markov condition, if we’re dealing with
+discrete RVs (the claim also holds for normally distributed RVs, but not
+universally for any type of continuous RVs).
+
 Whence simplicity?
 ------------------
+
+This is a somewhat more technical explanation of how BNs help in
+reducing complexity. An uninterested reader can skip ahead.
 
 The tells us that $\\pr(A\\wedge B) = \\pr(A\\vert B)\\pr(B)$. Its
 application to RVs (say the RVs in G are
@@ -197,3 +218,6 @@ reason:
 The first step is by the chain rule. The second is by the Markov
 condition and the fact that we employed an ancestral ordering. The third
 one uses . This ends the proof.
+
+Now, why does the product of CPTs yield a joint probability distribution
+satisfying the Markov condition, if we’re dealing with discrete RVs?
