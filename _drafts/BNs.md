@@ -56,7 +56,7 @@ arcs(cancer1) = cancer1.arcs
 graphviz.plot(cancer1)
 ```
 
-<img src="images/cancer-1.png" style="display: block; margin: auto;" />
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancer-1.png" style="display: block; margin: auto;" />
 
 This can be achieved in a somewhat simpler manner like this:
 
@@ -65,4 +65,4 @@ cancer2DAG <- model2network("[SH|PS][PS][S|PS][C|SH:S]")
 graphviz.plot(cancer2DAG)
 ```
 
-<img src="images/cancerSimpler-1.png" style="display: block; margin: auto;" />
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerSimpler-1.png" style="display: block; margin: auto;" />

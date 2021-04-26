@@ -80,6 +80,7 @@ Instead, we start with representing dependencies between RVs in such a set by me
 Here's one example of a QBN:
 
 
+
 ``` r
 cancer1 <- empty.graph(nodes = c("PS","SH","S","C"))
 cancer1.arcs <- matrix(c("PS", "SH",
@@ -92,8 +93,7 @@ arcs(cancer1) = cancer1.arcs
 graphviz.plot(cancer1)
 ```
 
-<img src="BNs_files/figure-gfm/cancer-1.png" style="display: block; margin: auto;" />
-
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancer-1.png" style="display: block; margin: auto;" />
 
 
 
@@ -135,14 +135,15 @@ With the intended reading:
 
 This can be achieved in a somewhat simpler manner like this:
 
+
+This can be achieved in a somewhat simpler manner like this:
+
 ``` r
 cancer2DAG <- model2network("[SH|PS][PS][S|PS][C|SH:S]")
 graphviz.plot(cancer2DAG)
 ```
 
-<img src="BNs_files/figure-gfm/cancerSimpler-1.png" style="display: block; margin: auto;" />
-
-
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerSimpler-1.png" style="display: block; margin: auto;" />
 
 
  The *ancestors* of $C$ are all the other RVs, the  parents of $C$ are $SH$ and $S$, the descentants of $PS$ are all the other RVs, and the children of $PS$ are $SH$ and $S$.
