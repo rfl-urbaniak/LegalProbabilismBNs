@@ -11,7 +11,7 @@ output:
 
 ```{r , echo = FALSE, eval = TRUE}
 #knitr::opts_knit$set(base.dir = "/home/rafal/L2/L2projects/LegalProbabilismBNs", base.url = "https://rfl-urbaniak.github.io/LegalProbabilismBNs/")
-#knitr::opts_chunk$set(fig.path = "images/")
+knitr::opts_chunk$set(fig.path = "images/")
 ```
 
 
