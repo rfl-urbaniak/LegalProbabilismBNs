@@ -6,8 +6,10 @@ output:
     preserve_yaml: true
 ---
 
-Set-up
-------
+
+
+### Set up
+
 
 The examples are given in R code, which we intertwine with additional
 explanations, which the reader is welcome to skip if it looks familiar.
@@ -35,6 +37,8 @@ library(Rgraphviz)
 library(knitr)
 library(kableExtra)
 ```
+
+### Bayesian networks crash-course
 
 While Bayes’s Theorem is of immense use when it comes to calculating
 various conditional probabilities, if we’re interested in the
