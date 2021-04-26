@@ -20,7 +20,7 @@ permalink:           none
 plugins:             [jekyll-paginate, jekyll-sitemap, jekyll-feed, jekyll-seo-tag]
 
 # Customise atom feed settings (this is where Jekyll-Feed gets configuration information)
-title:		           '[Legal Probabilism](https://medium.com/coffee-in-a-klein-bottle/creating-a-mathematics-blog-with-jekyll-78cdee0339f3) BNs'
+title:		           'Legal Probabilism BNs'
 description:	       'R code for bayesian networks used in our SEP entry'
 author:              'Rafal Urbaniak'
 
