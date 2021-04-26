@@ -1,6 +1,7 @@
 ---
 layout: page
 author: Rafal Urbaniak
+title: BNs for the Legal Probabilism entry
 ---
 
 
