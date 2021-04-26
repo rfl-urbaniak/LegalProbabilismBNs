@@ -6,6 +6,36 @@ output:
     preserve_yaml: true
 ---
 
+Set-up
+------
+
+The examples are given in R code, which we intertwine with additional
+explanations, which the reader is welcome to skip if it looks familiar.
+
+First, you need to install the relevant R libraries. This is a bit
+tricky, because some of them have to be installed through BiocManager.
+One way to go is this:
+
+``` r
+install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
+install.packages("BiocManager")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install()
+BiocManager::install(c("graph", "Rgraphviz"))
+
+install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
+```
+
+Then load the libraries we use (you need to have them installed first):
+
+``` r
+library(bnlearn)
+library(Rgraphviz)
+library(knitr)
+library(kableExtra)
+```
+
 While Bayes’s Theorem is of immense use when it comes to calculating
 various conditional probabilities, if we’re interested in the
 interaction of multiple hypotheses at various levels and multiple pieces
@@ -64,8 +94,6 @@ a direct description of a probability measure for them would require
 2<sup>*n*</sup> − 1 numbers. This would be a highly unfeasible method of
 specifying a probability distribution for a set of random variables.
 
-Optional material starts
-
 Moreover, even if we had specified the joint probability distribution
 for all our combinations of values of Rvs *X*, *Y*, *Z*, using it
 wouldn’t be the most efficient way of calculating conditional
@@ -77,8 +105,6 @@ and their possible values increase. With 100 binary RVs we’d need 2^{99}
 terms in the sum in the denominator, so it seems that to be able to
 calculate a single conditional probability we’d have to elicit quite a
 few uncoditional ones.
-
-Optional material ends
 
 Instead, we start with representing dependencies between RVs in such a
 set by means of a (DAG). A DAG is a collection of (called also ) – think
