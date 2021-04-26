@@ -226,5 +226,10 @@ Now, the sums in the fractions sum both to 1 (for reasons clear from the previou
   \vert \mathsf{\widehat{pa}_{k-1}}
   )\cdots P(\widehat{x}_1)
   $$
-    are both in the numerator and the denominator, so we are left with $P(\widehat{x}_{k}
-      \vert \mathsf{\widehat{pa}_{k}})$, as desired.
+
+    are both in the numerator and the denominator, so we are left with
+
+    $$P(\widehat{x}_{k}
+      \vert \mathsf{\widehat{pa}_{k}})$$
+
+       as desired.
