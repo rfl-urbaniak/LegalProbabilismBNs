@@ -134,7 +134,9 @@ The edges, intuitively, are meant to capture direct influence between RVs. The r
 
 ## Whence simplicity?
 
-The *chain rule* tells us that $P(A\wedge B) = P(A\vert B)P(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
+This is a somewhat more technical explanation of how BNs help in reducing complexity. An uninterested reader can skip ahead.
+
+First, the *chain rule* tells us that $P(A\wedge B) = P(A\vert B)P(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
 
 
 $$
@@ -171,3 +173,54 @@ P(x_{i+1}, x_{i}, \dots, x_1) = P(x_{i+1}\vert x_i, \dots, x_1) P(x_i, \dots, x_
 
 
 \noindent The first step is by the chain rule. The second is by the Markov  condition and the fact that we employed an ancestral ordering. The third one uses an identity we already obtained. This ends the proof.
+
+
+Now, why  does the product of CPTs yield a joint probability distribution satisfying the Markov condition, if we're dealing with discrete RVs?
+
+
+The argument for the discrete case is as follows. Fix an ancestral ordering of the RVs and definite  joint probability in terms of the conditional probabilities determined by the CPTs as we already did. We need to show it indeed is a probabilistic measure. Since the conditional probabilities are between 0 and 1, clearly so is their product. Then we need to show that the sum of $P(x_1,x_2,\dots,x_n)$ for all combinations of values of $X_1,X_2,\dots, X_n$ is 1. This can be shown by moving summation symbols around, the calculations start as follows:
+
+$$
+\sum_{x_1,\dots,x_n}P(x_1,\dots, x_n)  =  \\  = \sum_{x_1,\dots,x_n} P(x_n\vert \mathsf{pa_n})P(x_{n-1}\vert \mathsf{pa_{n-1}})\cdots P(x_1)\\
+= \sum_{x_1,\dots,x_{n-1}}\left[\sum_{x_n}P(x_n\vert \mathsf{pa_n})\right]
+P(x_{n-1}\vert \mathsf{pa_{n-1}})\cdots P(x_1)\\
+= \sum_{x_1,\dots,x_{n-1}}P(x_1,\dots, x_{n-1})\left[1\right] \dots
+P(x_{n-1}\vert \mathsf{pa_{n-1}})\cdots P(x_1)\\
+$$
+
+\noindent when we continue this way, all the factors reduce to 1.
+
+
+To show that the Markov condition holds in the resulting joint distribution we have to show that for any $x_k$ we have $P(x_k\vert \mathsf{nd_k})= P(x_k \vert \mathsf{pa_k})$, where $nd_k$ is any combination of values for all the nondescendants of $X_k$, $\mathsf{ND_k}$. So take any $k$, order the nodes so that all and only the nondescendants of $X_k$ precede it. Let $\widehat{x}_k,\widehat{nd}_k$ be some particular values of $X_k$ and $\mathsf{ND_k}$. $\mathsf{d_k}$ ranges over combinations of values of the descendants of $X_K$. The reasoning goes:
+
+$$
+P(\widehat{x}_k\vert \widehat{nd}_k)
+= \frac{P(\widehat{x}_k,\widehat{nd}_k)}{P(\widehat{nd}_k)}\\
+= \frac{\sum_{\mathsf{d_k}}P(\widehat{x}_1,
+  \dots,\widehat{x}_k,x_{k+1},\dots, x_n)}{
+\sum_{\mathsf{d_k}\cup\{x_k\}}P(\widehat{x}_1,
+  \dots,\widehat{x}_{k-1},x_{k},\dots, x_n)}
+\\
+= \frac{\sum_{\mathsf{d_k}}P(x_n\vert \mathsf{pa_n})\cdots
+P(x_{k+1}\vert \mathsf{pa_{k+1}})P(\widehat{x}_{k}\vert \mathsf{\widehat{pa}_{k}})\cdots P(\widehat{x}_1)
+}{
+\sum_{\mathsf{d_k}\cup\{x_k\}}P(x_n\vert \mathsf{pa_n})\cdots
+P(x_{k}\vert \mathsf{pa_{k}})P(\widehat{x}_{k-1}
+  \vert \mathsf{\widehat{pa}_{k-1}})\cdots P(\widehat{x}_1)
+} \\
+= \frac{P(\widehat{x}_{k}
+  \vert \mathsf{\widehat{pa}_{k}})
+  \cdots P(\widehat{x}_1)\sum_{\mathsf{d_k}}P(x_n\vert \mathsf{pa_n})\cdots
+P(x_{k+1}\vert \mathsf{pa_{k+1}})
+}{
+P(\widehat{x}_{k-1}
+  \vert \mathsf{\widehat{pa}_{k-1}})\cdots P(\widehat{x}_1)\sum_{\mathsf{d_k}\cup\{x_k\}}P(x_n\vert \mathsf{pa_n})\cdots
+P(x_{k}\vert \mathsf{pa_{k}})
+}
+$$
+
+Now, the sums in the fractions sum both to 1 (for reasons clear from the previous step of the proof), and $P(\widehat{x}_{k-1}
+  \vert \mathsf{\widehat{pa}_{k-1}}
+  )\cdots P(\widehat{x}_1)$
+    are both in the numerator and the denominator, so we are left with $P(\widehat{x}_{k}
+      \vert \mathsf{\widehat{pa}_{k}})$, as desired.
