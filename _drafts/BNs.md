@@ -59,7 +59,7 @@ can be represented as a sequence, for instance *H**H**H**T*, or
 Given a probability measure *P*, two events *A* and *B* are
 conditionally independent given another event *C*,
 *I*<sub>*P*</sub>(*A*, *B*\|*C*), just in case
-$P(A\\et B\\vert C) = P(A\\vert C)P(B \\vert C)$. Conditional and
+*P*(*A* ∧ *B*\|*C*) = *P*(*A*\|*C*)*P*(*B*\|*C*). Conditional and
 unconditional independence don’t have to coincide. If you toss twice a
 coin which is fair with probability $\\frac{1}{2}$, and $\\frac{3}{4}$
 biased towards heads with probability $\\frac{1}{2}$, the result of the
@@ -80,11 +80,12 @@ identities of the callers are no longer independent.
 Two RVs *X* and *Y* are conditonally independent given another RV *Z*,
 *I*<sub>*P*</sub>(*X*, *Y*\|*Z*) just in case for any combination of
 values of these RVs *x*, *y*, *z* it is the case that
-$I\_{P}(X=x \\et Y=y \\vert Z=z)$ (notice: *X*, *Y* and *Z* are RVs,
-while *x*, *y* and *z* are some particular values they can take). The
-notion naturally generalizes to sets of RVs. Often, instead of saying
-things like $P(X\_1 = x\_1\\et Y\_5=y\_5 \\vert Z\_3=z\_3)$ we’ll rather
-say *P*(*x*<sub>1</sub>, *y*<sub>5</sub>\|*z*<sub>3</sub>).
+*I*<sub>*P*</sub>(*X* = *x* ∧ *Y* = *y*\|*Z* = *z*) (notice: *X*, *Y*
+and *Z* are RVs, while *x*, *y* and *z* are some particular values they
+can take). The notion naturally generalizes to sets of RVs. Often,
+instead of saying things like
+*P*(*X*<sub>1</sub> = *x*<sub>1</sub> ∧ *Y*<sub>5</sub> = *y*<sub>5</sub>\|*Z*<sub>3</sub> = *z*<sub>3</sub>)
+we’ll rather say *P*(*x*<sub>1</sub>, *y*<sub>5</sub>\|*z*<sub>3</sub>).
 
 Now, if we have *n* RVs, even if we assume for simplicity that they’re
 binary (that is, they can take only one of two values), there are
@@ -113,3 +114,17 @@ of as ordered pairs of nodes), such that there is no sequence of nodes
 to *v*<sub>*i* + 1</sub> for 0 ≤ *i* ≤ *k* − 1 with
 *v*<sub>0</sub> = *v*<sub>*k*</sub>. A (QBN) is a DAG with nodes labeled
 by RVs. Here’s one example of a QBN:
+
+``` r
+cancer1 <- empty.graph(nodes = c("PS","SH","S","C"))
+cancer1.arcs <- matrix(c("PS", "SH",
+                   "PS", "S",
+                   "SH", "C",
+                    "S", "C"),
+                 byrow = TRUE, ncol = 2,
+                 dimnames = list(NULL, c("from", "to")))
+arcs(cancer1) = cancer1.arcs
+graphviz.plot(cancer1)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />

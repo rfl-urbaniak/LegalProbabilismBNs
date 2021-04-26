@@ -74,3 +74,19 @@ xP(x_1\vert y_1) & =  \frac{P{x_1,y_1}}{P{y_1}} \\ &  = \frac{\sum_{i}P(x_1,y_1,
 
 
 Instead, we start with representing dependencies between RVs in such a set by means of a \emph{directed acyclic graph} (DAG). A DAG is a collection of \emph{nodes} (called also \emph{vertices}) -- think of them as corresponding to the RVs, \emph{directed edges} (also called \emph{arcs}; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$.\footnote{Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.} A \emph{qualitative BN} (QBN) is a DAG with nodes labeled by RVs. Here's one example of a QBN:
+
+
+
+``` r
+cancer1 <- empty.graph(nodes = c("PS","SH","S","C"))
+cancer1.arcs <- matrix(c("PS", "SH",
+                   "PS", "S",
+                   "SH", "C",
+                    "S", "C"),
+                 byrow = TRUE, ncol = 2,
+                 dimnames = list(NULL, c("from", "to")))
+arcs(cancer1) = cancer1.arcs
+graphviz.plot(cancer1)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
