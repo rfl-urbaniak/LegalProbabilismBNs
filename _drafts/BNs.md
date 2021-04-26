@@ -159,3 +159,41 @@ graphviz.plot(cancer1)
 </tr>
 </tbody>
 </table>
+
+Whence simplicity?
+------------------
+
+The tells us that $\\pr(A\\wedge B) = \\pr(A\\vert B)\\pr(B)$. Its
+application to RVs (say the RVs in G are
+*X*<sub>1</sub>, …*X*<sub>*n*</sub>) yields:
+
+So, if $\\pr$ is compatible with G, we don’t have to represent it
+directly by listing all the 2<sup>*n*</sup> − 1 values. Instead, the
+joint probability $\\pr(X\_1\\dots,X\_n)$ (note: this is really an
+assignment of probability values to possible combinations of the values
+of these RVs), can be represented using the conditional probabilities on
+the right-hand side of , and moreover, for each conditional probability
+of an RVs *X* given some other RVs, non-parents of *X* can be removed
+from the condition, since RVs are independent of them. Let’s slow down
+and take a look at the argument. Pick an ancestral ordering
+*X*<sub>1</sub>, …, *X*<sub>*n*</sub>, of the RVs, that is, an ordering
+in which if *Z* is a descendant of *X*, *Z* follows *Y* in the ordering.
+Take any selection of values of these variables,
+*x*<sub>1</sub>, …, *x*<sub>*n*</sub>. Let pa<sub>i</sub> be the set
+cotaining all the values of the parents of *X*<sub>*i*</sub> that belong
+to this sequence. Since this is an ancestral ordering, the parents have
+to occur before *x*<sub>*i*</sub>. We need to prove We prove it by
+induction on the length of the sequence. The basic case comes for free.
+Now assume: we need to show: One option is that
+$\\pr(x\_i,x\_{i-1},\\dots,x)=0$. Then, also
+$\\pr(x\_{i+1}, x\_{i}, \\dots, x\_1)=0$, and by the induction
+hypothesis, there is a 1 ≤ *k* ≤ *i* such that
+$\\pr(x\_k\\vert \\mathsf{pa\_k})=0$, and so also the right-hand side of
+equals 0 and so holds.
+
+Another option is that $\\pr(x\_i,x\_{i-1},\\dots,x)\\neq 0$. Then we
+reason:
+
+The first step is by the chain rule. The second is by the Markov
+condition and the fact that we employed an ancestral ordering. The third
+one uses . This ends the proof.

@@ -123,3 +123,51 @@ With the intended reading:
 </tr>
 </tbody>
 </table>
+
+
+\noindent The \emph{ancestors} of $C$ are all the other RVs, the  parents of $C$ are $SH$ and $S$, the descentants of $PS$ are all the other RVs, and the children of $PS$ are $SH$ and $S$.
+
+The edges, intuitively, are meant to capture direct influence between RVs. The role that such direct influence plays is that in a BN any RV is conditionally independent of its nondescentants (including ancestors), given its parents. If this is the case for a given probabilistic measure $P{}$ and a given DAG $\mathsf{G}$, we say that $P{}$ is compatible with $\mathsf{G}$, or that it satisfies the \emph{Markov condition}.
+
+
+
+
+## Whence simplicity?
+
+The *chain rule* tells us that $P(A\wedge B) = P(A\vert B)P(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
+
+
+$$
+P(x_1,\cdots,x_n)  = P(x_n\vert x_1,\cdots,x_{n-1})\times
+\\ = P(x_{n-1}\vert x_1,\cdots,x_{n-2})\times \\  \times \cdots \times P(x_2 \vert x_1) P(x_1)
+$$
+
+So, if $P$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $P(X_1\dots,X_n)$ (note: this is really an assignment of probability values to \emph{all} possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them.
+Let's slow down and take a look at the argument. Pick an ancestral ordering $X_1, \dots, X_n$, of the RVs, that is, an ordering in which if $Z$ is a descendant of $X$, $Z$ follows $Y$ in the ordering. Take any selection of values of these variables, $x_1, \dots, x_n$. Let $\mathsf{pa_i}$ be the set containing all the values of the parents of $X_i$ that belong to this sequence. Since this is an ancestral ordering, the parents have to occur before $x_i$. We need to prove
+
+$$
+\begin{align}P(x_n, x_{n-1}, \dots, x_1) = P(x_n\vert \mathsf{pa_n})P(x_{n-1}\vert \mathsf{pa_{n-1}})\cdots P(x_1)
+$$
+
+We prove it by induction on the length of the sequence. The basic case comes for free. Now assume:
+
+$$
+P(x_i, x_{i-1}, \dots, x_1 = P(x_i\vert \mathsf{pa_i})P(x_{i-1}\vert \mathsf{pa_{i-1}})\cdots P(x_1)$$
+
+\noindent we need to show:
+
+$$P(x_{i+1}, x_{i}, \dots, x_1) = P(x_{i+1}\vert \mathsf{pa_{i+1}})P(x_{i}\vert \mathsf{pa_{i}})\cdots P(x_1)\label{eq:markoproof3}$$
+
+One option is that $P(x_i,x_{i-1},\dots,x)=0$. Then, also  $P(x_{i+1}, x_{i}, \dots, x_1)=0$, and by the induction hypothesis, there is a $1\leq k\leq i$ such that $P(x_k\vert \mathsf{pa_k})=0$, and so also the right-hand side   equals 0 and so the claim holds.
+
+Another option is that  $P(x_i,x_{i-1},\dots,x)\neq 0$.
+Then we reason:
+
+$$
+P(x_{i+1}, x_{i}, \dots, x_1) = P(x_{i+1}\vert x_i, \dots, x_1) P(x_i, \dots, x_1)\\
+ = P(x_{i+1}\vert \mathsf{pa_{i+1}}) P(x_i, \dots, x_1)\\
+ = P(x_{i+1}\vert \mathsf{pa_{i+1}})  P(x_{i}\vert \mathsf{pa_{i}})\cdots P(x_1)
+ $$
+
+
+\noindent The first step is by the chain rule. The second is by the Markov  condition and the fact that we employed an ancestral ordering. The third one uses an identity we already obtained. This ends the proof.

@@ -120,3 +120,34 @@ S      The subject smokes.
 
 C      The subject develops cancer.
 ----   ------------------------------------
+
+
+
+## Whence simplicity?
+
+The \emph{chain rule} tells us that $\pr(A\wedge B) = \pr(A\vert B)\pr(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
+\begin{align}
+\label{eq:chainRV}
+\pr(x_1,\cdots,x_n) & = \pr(x_n\vert x_1,\cdots,x_{n-1})\times \\ \nonumber
+& \pr(x_{n-1}\vert x_1,\cdots,x_{n-2})\times \\ \nonumber
+& \times \cdots \times \pr(x_2 \vert x_1) \pr(x_1)
+\end{align}
+
+So, if $\pr$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $\pr(X_1\dots,X_n)$ (note: this is really an assignment of probability values to \emph{all} possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side of \eqref{eq:chainRV}, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them. 
+Let's slow down and take a look at the argument. Pick an ancestral ordering $X_1, \dots, X_n$, of the RVs, that is, an ordering in which if $Z$ is a descendant of $X$, $Z$ follows $Y$ in the ordering. Take any selection of values of these variables, $x_1, \dots, x_n$. Let $\mathsf{pa_i}$ be the set cotaining all the values of the parents of $X_i$ that belong to this sequence. Since this is an ancestral ordering, the parents have to occur before $x_i$. We need to prove \scriptsize
+\begin{align}\pr(x_n, x_{n-1}, \dots, x_1) = \pr(x_n\vert \mathsf{pa_n})\pr(x_{n-1}\vert \mathsf{pa_{n-1}})\cdots \pr(x_1)\label{eq:markoproof1}\end{align} \footnotesize
+We prove it by induction on the length of the sequence. The basic case comes for free. Now assume: \scriptsize
+\begin{align}\pr(x_i, x_{i-1}, \dots, x_1 = \pr(x_i\vert \mathsf{pa_i})\pr(x_{i-1}\vert \mathsf{pa_{i-1}})\cdots \pr(x_1)\label{eq:markoproof2}\end{align} \footnotesize
+\noindent we need to show: \scriptsize
+\begin{align}\pr(x_{i+1}, x_{i}, \dots, x_1) = \pr(x_{i+1}\vert \mathsf{pa_{i+1}})\pr(x_{i}\vert \mathsf{pa_{i}})\cdots \pr(x_1)\label{eq:markoproof3}\end{align}\footnotesize
+One option is that $\pr(x_i,x_{i-1},\dots,x)=0$. Then, also  $\pr(x_{i+1}, x_{i}, \dots, x_1)=0$, and by the induction hypothesis, there is a $1\leq k\leq i$ such that $\pr(x_k\vert \mathsf{pa_k})=0$, and so also the right-hand side of \eqref{eq:markoproof3} equals 0 and so \eqref{eq:markoproof3} holds.
+
+Another option is that  $\pr(x_i,x_{i-1},\dots,x)\neq 0$.
+Then we reason: \scriptsize
+\begin{align*}\pr(x_{i+1}, x_{i}, \dots, x_1) &= \pr(x_{i+1}\vert x_i, \dots, x_1) \pr(x_i, \dots, x_1)\\
+& = \pr(x_{i+1}\vert \mathsf{pa_{i+1}}) \pr(x_i, \dots, x_1)\\
+& = \pr(x_{i+1}\vert \mathsf{pa_{i+1}})  \pr(x_{i}\vert \mathsf{pa_{i}})\cdots \pr(x_1)\end{align*}\footnotesize 
+
+
+\noindent The first step is by the chain rule. The second is by the Markov  condition and the fact that we employed an ancestral ordering. The third one uses \eqref{eq:markoproof2}. This ends the proof. 
+
