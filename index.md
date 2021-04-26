@@ -75,10 +75,9 @@ $$xP(x_1\vert y_1)  =  \frac{P{x_1,y_1}}{P{y_1}}   = \frac{\sum_{i}P(x_1,y_1,Z=z
 
 Instead, we start with representing dependencies between RVs in such a set by means of a *directed acyclic graph* (DAG). A DAG is a collection of *nodes* (called also *vertices*) -- think of them as corresponding to the RVs, *directed edges* (also called *arcs*; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$. (Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.) A *qualitative BN* (QBN) is a DAG with nodes labeled by RVs.
 
-### An example with R
+### A qualitative BN with R
 
 Here's one example of a QBN:
-
 
 
 ``` r
@@ -93,7 +92,11 @@ arcs(cancer1) = cancer1.arcs
 graphviz.plot(cancer1)
 ```
 
-<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="BNs_files/figure-gfm/cancer-1.png" style="display: block; margin: auto;" />
+
+
+
+
 
 With the intended reading:
 
@@ -129,17 +132,43 @@ With the intended reading:
 </table>
 
 
+
+This can be achieved in a somewhat simpler manner like this:
+
+``` r
+cancer2DAG <- model2network("[SH|PS][PS][S|PS][C|SH:S]")
+graphviz.plot(cancer2DAG)
+```
+
+<img src="BNs_files/figure-gfm/cancerSimpler-1.png" style="display: block; margin: auto;" />
+
+
+
+
  The *ancestors* of $C$ are all the other RVs, the  parents of $C$ are $SH$ and $S$, the descentants of $PS$ are all the other RVs, and the children of $PS$ are $SH$ and $S$.
 
 The edges, intuitively, are meant to capture direct influence between RVs. The role that such direct influence plays is that in a BN any RV is conditionally independent of its nondescentants (including ancestors), given its parents. If this is the case for a given probabilistic measure $P{}$ and a given DAG $\mathsf{G}$, we say that $P{}$ is compatible with $\mathsf{G}$, or that it satisfies the *Markov condition*.
 
 
+### Adding conditional probability tables (CPTs)
+
+A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it \emph{represents} a probabilistic measure $\pr$ quantitatvely just in case they are compatible, and $\pr$ agrees with its assignment of CPTs.
 
 
 
 
 
-## Whence simplicity?
+
+
+ This encodes, intuitively, the information about the strength of direct influences: that the prior probability that at least one parent smokes is $0.3$, that the probability that one is a second-hand smoker if at least one parent smokes is 0.8 and 0.3 if no parent smokes, that the probability of cancer if one smokes and is a second-hand smoker is 0.6, etc.
+
+
+
+
+
+
+
+### Whence simplicity?
 
 This is a somewhat more technical explanation of how BNs help in reducing complexity. An uninterested reader can skip it.
 
