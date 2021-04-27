@@ -21,12 +21,9 @@ plugins:             [jekyll-paginate, jekyll-sitemap, jekyll-feed, jekyll-seo-t
 
 # Customise atom feed settings (this is where Jekyll-Feed gets configuration information)
 title:		           'Legal Probabilism BNs'
-description:	       'R code for bayesian networks used in our SEP entry'
+description:	       'with R'
 author:              'Rafal Urbaniak'
 
 # RSS 2.0 can be used instead of Atom by uncommenting following two lines
 #feed:
 #  path: rss-feed.xml
- 
-  
-  
