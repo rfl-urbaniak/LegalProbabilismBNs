@@ -1,11 +1,14 @@
 ---
 layout: page
+toc: true
 #title: Bayesian Networks for the Legal Probabilism SEP entry
 output:
   md_document:
     variant: markdown_github
     preserve_yaml: true
 ---
+
+
 
 The examples are given in R code, which we intertwine with additional
 explanations, which the reader is welcome to skip if they look familiar.
@@ -17,7 +20,7 @@ explanations, which the reader is welcome to skip if they look familiar.
 First, you need to install the relevant R libraries. The crucial one is `bnlearn` [by Marco Scutari](https://www.bnlearn.com/about/) (who was also kind enough to include some functionalities when I inquired about them). This is a bit
 tricky, because some of them have to be installed through BiocManager.
 One way to go is this:
- 
+
 ``` r
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", repos = NULL, type = "source")
 install.packages("BiocManager")
