@@ -14,7 +14,7 @@ explanations, which the reader is welcome to skip if they look familiar.
 ### Set-up
 
 
-First, you need to install the relevant R libraries. This is a bit
+First, you need to install the relevant R libraries. The crucial one is `bnlearn` [by Marco Scutari](https://www.bnlearn.com/about/) (who was also kind enough to include some functionalities when I inquired about them). This is a bit
 tricky, because some of them have to be installed through BiocManager.
 One way to go is this:
 
