@@ -13,6 +13,7 @@ output:
 
 The *Legal Probabilism* entry in the Stanford Encyclopedia of Philosophy by [Marcello Di Bello](https://www.marcellodibello.com/) and yours truly) includes a section on Bayesian Networks. Here, we provide more details and source code in R for those examples.
 
+The folder containing  $\textsf{R}$ files containing bare code for the BNs is available HERE.
 
 **Contents**
 * TOC
@@ -53,7 +54,7 @@ library(kableExtra)
 
 
 
-### Bayesian Networks: a crashcourse
+### Probabilistic intro
 
 
 While Bayes's Theorem is of immense use when it comes to calculating various conditional probabilities, if we're interested in the interaction of multiple hypotheses at various levels and multiple pieces of evidence, calculations quickly become inconvenient, to say the least. Moreover, if such considerations are to be presented to a fact-finder, it is rather unlikely that they would be transparent and easily understood. Luckily, a tool exist to make such tasks easier. Bayesian networks (BNs) can be used for a fairly transparent and computationally more manageable evalation and presentation of the interaction of multiple pieces of evidence and hypotheses. We'll start with a general presentation of BNs, and then go over a few main methods of employing BNs in presentation, aggregation and evaluation of evidence in legal fact-finding.
@@ -80,13 +81,15 @@ Moreover, even if we had specified the joint probability distribution for all ou
 $$xP(x_1\vert y_1)  =  \frac{P(x_1,y_1)}{P(y_1)}   = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
 \sum_{i,j}P(X=x_j,y_1,Z=Z_i)}$$
 
- in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need $2^{99}$ terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few uncoditional ones.
+ in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need $2^{99}$ terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few unconditional ones.
+
+
+### Qualitative BNs (DAGs with node labels)
 
 
 
 Instead, we start with representing dependencies between RVs in such a set by means of a *directed acyclic graph* (DAG). A DAG is a collection of *nodes* (called also *vertices*) -- think of them as corresponding to the RVs, *directed edges* (also called *arcs*; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$. (Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.) A *qualitative BN* (QBN) is a DAG with nodes labeled by RVs.
 
-### A qualitative BN with R
 
 Here's one example of a QBN:
 
@@ -162,11 +165,11 @@ graphviz.plot(cancer2DAG)
 The edges, intuitively, are meant to capture direct influence between RVs. The role that such direct influence plays is that in a BN any RV is conditionally independent of its nondescentants (including ancestors), given its parents. If this is the case for a given probabilistic measure $P{}$ and a given DAG $\mathsf{G}$, we say that $P{}$ is compatible with $\mathsf{G}$, or that it satisfies the *Markov condition*.
 
 
-### Adding conditional probability tables (CPTs)
+### Adding conditional probability tables (CPTs) to obtain BNs
 
 A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P}$ quantitatively just in case they are compatible, and $\pr$ agrees with its assignment of CPTs.
 
-Adding probabilties to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script (in needs to be in your folder), then, remember that `E` stands for the child, and `H` for a parent.
+Adding probabilities to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script (in needs to be in your folder), then, remember that `E` stands for the child, and `H` for a parent.
 
 ``` r
 source("cptCreate.R")
