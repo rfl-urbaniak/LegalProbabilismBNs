@@ -8,7 +8,9 @@ output:
     preserve_yaml: true
 ---
 
-
+**Contents**
+* TOC
+{:toc}
 
 The examples are given in R code, which we intertwine with additional
 explanations, which the reader is welcome to skip if they look familiar.
