@@ -8,6 +8,12 @@ output:
     preserve_yaml: true
 ---
 
+
+### Brief description
+
+The *Legal Probabilism* entry in the Stanford Encyclopedia of Philosophy includes a section on Bayesian Networks. Here, we provide more details and source code in R for those examples.
+
+
 **Contents**
 * TOC
 {:toc}
