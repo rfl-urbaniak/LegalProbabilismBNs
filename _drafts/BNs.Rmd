@@ -76,4 +76,32 @@ graphviz.plot(cancer2DAG)
 
 
 
+Adding probabilties to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script, then, remember that `E` stands for the child, and `H` for a parent. 
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+source("cptCreate.R")
+
+#tables for separate nodes
+PSprob <- priorCPT("PS",prob1 = .3) 
+
+Sprob <-  singleCPT(eNode = "S", hNode = "PS", probEifHS1 = .4 , probEifHS2 =  .2)
+SHprob <- singleCPT(eNode = "SH", hNode = "PS", probEifHS1 = .8, probEifHS2 = .3)
+
+Cprob <- doubleCPT(eNode= "C", h1Node = "S", h2Node = "SH",
+                   probEifH1S1H2S1 = .6,
+                   probEifH1S1H2S2 = .4,
+                   probEifH1S2H2S1 = .1,
+                   probEifH1S2H2S2 = .01)
+
+#put them together and add to the DAG to create a BN
+cancerCPT <- list(PS = PSprob, S = Sprob, SH = SHprob, C = Cprob)
+cancerBN <- custom.fit(cancer2DAG,cancerCPT)
+
+#display the CPTs for all the nodes
+cancerBN
+```
+\normalsize
+
 

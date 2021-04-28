@@ -11,7 +11,7 @@ output:
 
 ### Brief description
 
-The *Legal Probabilism* entry in the Stanford Encyclopedia of Philosophy includes a section on Bayesian Networks. Here, we provide more details and source code in R for those examples.
+The *Legal Probabilism* entry in the Stanford Encyclopedia of Philosophy by [Marcello Di Bello](https://www.marcellodibello.com/) and yours truly) includes a section on Bayesian Networks. Here, we provide more details and source code in R for those examples.
 
 
 **Contents**
@@ -56,10 +56,10 @@ library(kableExtra)
 ### Bayesian Networks: a crashcourse
 
 
-While Bayes's Theorem is of immense use when it comes to calculating various conditional probabilities, if we're interested in the interaction of multiple hypotheses at various levels and multiple pieces of evidence, calculations quickly become inconvenient, to say the least. Moreover, if such considerations are to be presented to a fact-finder, it is rather unlikely that they would be transparent and easily understood. Luckily, a tool exist to make such tasks easier. Bayesian networks (BNs) can be used for a fairly transparent and computationally more manageable evalation and presentation of the interaction of multiple pieces of evidence and hypotheses. We'll start with a general presentation of BNs, and then go over a few main methods of employing BNs in presentation, aggregation and evaluation of evidence in legal fact-finding.  
+While Bayes's Theorem is of immense use when it comes to calculating various conditional probabilities, if we're interested in the interaction of multiple hypotheses at various levels and multiple pieces of evidence, calculations quickly become inconvenient, to say the least. Moreover, if such considerations are to be presented to a fact-finder, it is rather unlikely that they would be transparent and easily understood. Luckily, a tool exist to make such tasks easier. Bayesian networks (BNs) can be used for a fairly transparent and computationally more manageable evalation and presentation of the interaction of multiple pieces of evidence and hypotheses. We'll start with a general presentation of BNs, and then go over a few main methods of employing BNs in presentation, aggregation and evaluation of evidence in legal fact-finding.
 
 
-A *random variable* (RV) $X$ is a function from the elements of a sample space into $\mathbb{R}$, the set of real numbers. For instance, if our sample space is the set of all potential outcomes of tossing a fair coin four times (each such outcome can be represented as a sequence, for instance  $HHHT$, or $HTHT$), $X$ can be the number of heads among the tosses.  
+A *random variable* (RV) $X$ is a function from the elements of a sample space into $\mathbb{R}$, the set of real numbers. For instance, if our sample space is the set of all potential outcomes of tossing a fair coin four times (each such outcome can be represented as a sequence, for instance  $HHHT$, or $HTHT$), $X$ can be the number of heads among the tosses.
 
 Given a probability measure $P$, two events $A$ and $B$ are conditionally independent given another event $C$, $I_{P}(A,B\vert C)$, just in case $P(A\wedge B\vert C) = P(A\vert C)P(B \vert C)$. Conditional and unconditional independence don't have to coincide. If you toss twice a coin which is fair with probability $\frac{1}{2}$, and $\frac{3}{4}$ biased towards heads with probability $\frac{1}{2}$, the result of the second toss is not independent of the first one. After all, if the first result is heads, this increases the probability that the coin is biased, and so increases the probability of heads in the second toss. On the other hand, conditionally on knowledge whether the coin is fair, the results are independent. If the coin is fair, the probability of heads in the second toss is $\frac{1}{2}$ and if the coin is biased, it is $\frac{3}{4}$, no matter what the first result was. And in the opposite direction, indepedence can disappear when we condition. Say I have two friends, Alice and Peter, who call me regularly, but they decide to do so independently. Then, whether they call in five minutes is independent. Now, suppose the phone rings. Conditional on the phone ringing, I know that if it isn't Alice, it's Peter, and so the identities of the callers are no longer independent.
 
@@ -68,7 +68,7 @@ Given a probability measure $P$, two events $A$ and $B$ are conditionally indepe
 
 
 Two RVs $X$ and $Y$ are conditionally independent given another RV $Z$, $I_{P}(X,Y\vert Z)$ just in case for any combination of values of these RVs $x,y,z$ it is the case that $I_{P}(X=x \wedge Y=y \vert Z=z)$ (notice: $X,Y$ and $Z$ are RVs, while $x,y$ and $z$ are some particular values they can take). The notion naturally generalizes to sets of RVs.
-Often, instead of saying things like $P(X_1 = x_1\wedge Y_5=y_5 \vert Z_3=z_3)$ we'll rather say $P(x_1,y_5\vert z_3)$.  
+Often, instead of saying things like $P(X_1 = x_1\wedge Y_5=y_5 \vert Z_3=z_3)$ we'll rather say $P(x_1,y_5\vert z_3)$.
 
 
 Now, if we have $n$ RVs, even if we assume for simplicity that they're binary (that is, they can take only one of two values), there are $2^n$ possible combinations of values they could take, and so a direct description of a probability measure for them would require $2^n-1$ numbers. This would be a highly unfeasible method of specifying a probability distribution for a set of random variables.
@@ -77,10 +77,10 @@ Now, if we have $n$ RVs, even if we assume for simplicity that they're binary (t
 
 Moreover, even if we had specified the joint probability distribution for all our combinations of values of Rvs $X, Y, Z$, using it wouldn't be the most efficient way of calculating conditional probabilities or the probability that a certain selected RV takes a certain particular value. For instance, we would have to rely on:
 
-$$xP(x_1\vert y_1)  =  \frac{P{x_1,y_1}}{P{y_1}}   = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
+$$xP(x_1\vert y_1)  =  \frac{P(x_1,y_1)}{P(y_1)}   = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
 \sum_{i,j}P(X=x_j,y_1,Z=Z_i)}$$
 
- in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need 2^{99} terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few uncoditional ones.
+ in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need $2^{99}$ terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few uncoditional ones.
 
 
 
@@ -164,15 +164,88 @@ The edges, intuitively, are meant to capture direct influence between RVs. The r
 
 ### Adding conditional probability tables (CPTs)
 
-A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it \emph{represents} a probabilistic measure $\pr$ quantitatvely just in case they are compatible, and $\pr$ agrees with its assignment of CPTs.
+A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P}$ quantitatively just in case they are compatible, and $\pr$ agrees with its assignment of CPTs.
+
+Adding probabilties to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script (in needs to be in your folder), then, remember that `E` stands for the child, and `H` for a parent.
+
+``` r
+source("cptCreate.R")
+
+#tables for separate nodes
+PSprob <- priorCPT("PS",prob1 = .3)
+
+Sprob <-  singleCPT(eNode = "S", hNode = "PS", probEifHS1 = .4 , probEifHS2 =  .2)
+SHprob <- singleCPT(eNode = "SH", hNode = "PS", probEifHS1 = .8, probEifHS2 = .3)
+
+Cprob <- doubleCPT(eNode= "C", h1Node = "S", h2Node = "SH",
+                   probEifH1S1H2S1 = .6,
+                   probEifH1S1H2S2 = .4,
+                   probEifH1S2H2S1 = .1,
+                   probEifH1S2H2S2 = .01)
+
+#put them together and add to the DAG to create a BN
+cancerCPT <- list(PS = PSprob, S = Sprob, SH = SHprob, C = Cprob)
+cancerBN <- custom.fit(cancer2DAG,cancerCPT)
+
+#display the CPTs for all the nodes
+cancerBN
+```
+
+    ##
+    ##   Bayesian network parameters
+    ##
+    ##   Parameters of node C (multinomial distribution)
+    ##
+    ## Conditional probability table:
+    ##
+    ## , , SH = 1
+    ##
+    ##    S
+    ## C      1    0
+    ##   1 0.60 0.10
+    ##   0 0.40 0.90
+    ##
+    ## , , SH = 0
+    ##
+    ##    S
+    ## C      1    0
+    ##   1 0.40 0.01
+    ##   0 0.60 0.99
+    ##
+    ##
+    ##   Parameters of node PS (multinomial distribution)
+    ##
+    ## Conditional probability table:
+    ##  PS
+    ##   1   0
+    ## 0.3 0.7
+    ##
+    ##   Parameters of node S (multinomial distribution)
+    ##
+    ## Conditional probability table:
+    ##
+    ##    PS
+    ## S     1   0
+    ##   1 0.4 0.2
+    ##   0 0.6 0.8
+    ##
+    ##   Parameters of node SH (multinomial distribution)
+    ##
+    ## Conditional probability table:
+    ##
+    ##    PS
+    ## SH    1   0
+    ##   1 0.8 0.3
+    ##   0 0.2 0.7
 
 
 
+How do you read this?
+
+- Let's look at the  parameters of node `PS` first. The table tells you that the prior probability of at least one parent smoking is .3.
+- For `S` and `SH` the table is 2-dimensional; the tables tell you the probabilies of various states of these nodes conditional on the state of the single parent node. For instance, the probability  that the patient smokes given that at least one of their parents smokes is .4, while the probability that a patient is a second-hand smoker given that their parents smoke is .8 (and .3 otherwise).
 
 
-
-
- This encodes, intuitively, the information about the strength of direct influences: that the prior probability that at least one parent smokes is $0.3$, that the probability that one is a second-hand smoker if at least one parent smokes is 0.8 and 0.3 if no parent smokes, that the probability of cancer if one smokes and is a second-hand smoker is 0.6, etc.
 
 
 
