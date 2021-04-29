@@ -275,3 +275,66 @@ graphviz.plot(Measurement)
 \normalsize
 
 
+
+
+```{r,echo=FALSE,eval=TRUE, fig.width=2, fig.height=2, fig.align = "center",cache=TRUE}
+Definitional <- model2network("[Distance][Time][Velocity|Distance:Time]")
+graphviz.plot(Definitional)
+```
+
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+evidenceAccuracy <-  model2network("[Accuracy of evidence][Excess alcohol level][Evidence for excess|Accuracy of evidence:Excess alcohol level]")
+graphviz.plot(evidenceAccuracy)
+```
+\normalsize
+
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+opportunity <- model2network("[H1][H2|H1][A1][A2][E1|H1:A1][E2|H1:A2]")
+graphviz.plot(opportunity)
+```
+
+
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+cameras <- model2network("[H][D][C1|H][C2|H:C1:D]")
+graphviz.plot(cameras)
+```
+\normalsize
+\normalsize
+
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+alibi <- model2network("[S present][S guilty|S present][Alibi accuracy|S guilty][Alibi|Alibi accuracy:S present]")
+graphviz.plot(alibi)
+```
+\normalsize
+
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+DNA789 <- model2network("[S is C1][S is C2][Genotype of C1|S is C1][Genotype of C2|S is C2][S is the source|S is C1:S is C2][(7,8,9) found|Genotype of C1:Genotype of C2]")
+graphviz.plot(DNA789)
+```
+\normalsize
+
+
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+SallyClarkDAG <- model2network("[Abruising|Acause][Adisease|Acause][Bbruising|Bcause][Bdisease|Bcause][Acause][Bcause|Acause][Nomurdered|Acause:Bcause][Guilty|Nomurdered]")
+
+graphviz.plot(SallyClarkDAG)
+```
+\normalsize

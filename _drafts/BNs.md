@@ -418,3 +418,48 @@ graphviz.plot(Measurement)
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+
+``` r
+evidenceAccuracy <-  model2network("[Accuracy of evidence][Excess alcohol level][Evidence for excess|Accuracy of evidence:Excess alcohol level]")
+graphviz.plot(evidenceAccuracy)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+opportunity <- model2network("[H1][H2|H1][A1][A2][E1|H1:A1][E2|H1:A2]")
+graphviz.plot(opportunity)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+cameras <- model2network("[H][D][C1|H][C2|H:C1:D]")
+graphviz.plot(cameras)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+alibi <- model2network("[S present][S guilty|S present][Alibi accuracy|S guilty][Alibi|Alibi accuracy:S present]")
+graphviz.plot(alibi)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+DNA789 <- model2network("[S is C1][S is C2][Genotype of C1|S is C1][Genotype of C2|S is C2][S is the source|S is C1:S is C2][(7,8,9) found|Genotype of C1:Genotype of C2]")
+graphviz.plot(DNA789)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+SallyClarkDAG <- model2network("[Abruising|Acause][Adisease|Acause][Bbruising|Bcause][Bdisease|Bcause][Acause][Bcause|Acause][Nomurdered|Acause:Bcause][Guilty|Nomurdered]")
+
+graphviz.plot(SallyClarkDAG)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" />

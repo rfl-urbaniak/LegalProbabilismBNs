@@ -625,7 +625,7 @@ graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
 
 
 
-#### Cause, measurement
+#### Cause, measurement, synthesis
 
 
 The *Cause-Consequence Idiom* models a causal process in terms of the relationship between a cause and its consequence.
@@ -652,8 +652,132 @@ graphviz.plot(Measurement)
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/Measurement.jpeg" width="100%" style="display: block; margin: auto;" />
 
 
+*Definitional/Synthesis Idiom* is used in situations in which a node is defined in terms of its parents nodes. For instance:
 
 
+
+``` r
+Measurement <- model2network("[Accuracy][Actual value][Observed value|Accuracy:Actual value]")
+graphviz.plot(Measurement)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/Definitional.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+
+We already discussed one idiom: \emph{The Evidence Idiom}, which simply consists of a hypothesis node, and various pieces of evidence related to it as its children.
+The legal variant of the Measurement Idiom is called the \emph{Evidence Accuracy Idiom}, and its instantiation might look like this:
+
+
+### Evidence accuracy, opportunity
+
+We already discussed the evidence idiom, which simply consists of a hypothesis node, and various pieces of evidence related to it as its children.  The legal variant of the Measurement Idiom is called the *Evidence Accuracy Idiom*, and its instantiation might look like this:
+
+``` r
+evidenceAccuracy <-  model2network("[Accuracy of evidence][Excess alcohol level][Evidence for excess|Accuracy of evidence:Excess alcohol level]")
+graphviz.plot(evidenceAccuracy)
+```
+
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/evidenceAccuracy.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+
+
+A novelty appears, however, when we think about the notion of opportunity understood as a necessary requirement for the defendat's guilt (such as being present at the scene). Oppotrunity is built in as a parent of the guilt hypothesis, here's an example with a few moving elements:
+
+
+
+``` r
+opportunity <- model2network("[H1][H2|H1][A1][A2][E1|H1:A1][E2|H1:A2]")
+graphviz.plot(opportunity)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/opportunity.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+|Node |   Proposition|
+|--- |   ---   |
+|H1 |  Defendant present at the scene |
+|H2 |  Defendant guilty |
+|A1 | Accuracy of eyewitness evidence|
+|A2 | Accuracy of security camera evidence |
+|E1 | Eyewitness testimony |
+|E2 | Evidence from security camera|
+
+The same structure is used to build in a node for a motive.
+
+#### Dependency between items of evidence, alibi
+
+
+One useful aspect of BN representation is that we can clearly visualise and take under consideration the dependency between pieces of evidence. For instance, if one of  two security cameras captured an image of someone matching the suspect, it might be very likely that so did the second one. In such cases, additional evidence might be practically useless and presenting it as independent might lead to gross overestimation of its importance.
+
+``` r
+cameras <- model2network("[H][D][C1|H][C2|H:C1:D]")
+graphviz.plot(cameras)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cameras.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+
+|Node |  Proposition|
+|---   | ----    |
+|H |  Defendant present at the scene |
+|C1 | Camera 1 captures image of a matching person |
+|C2 | Camera 2 captures image of a matching person |
+|D |  What cameras capture is dependent |
+
+
+
+The *Alibi Idiom*, on the other hand, is used to model alibi evidence which seems to directly contradict the prosecution hypothesis. Crucially, the hypothesis itself may have impact on the accuracy of the evidence:
+
+
+
+``` r
+alibi <- model2network("[S present][S guilty|S present][Alibi accuracy|S guilty][Alibi|Alibi accuracy:S present]")
+graphviz.plot(alibi)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/alibi.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+
+
+### BNs for mixed DNA evidence evaluation
+
+
+
+One type of legal applications of BNs is to evaluate DNA evidence. At each locus (a small region of the DNA) there occur short sequences of base pairs repeated multiple times. The number of times that the sequences are repeated varies between individuals. The length of a repeated sequences expressed as the number of repeats in the sequence is called an allele. At each locus there are two alleles, iherited from the parents. So a particular locus can be described in terms of two numbers, the genotype of that locus. The pairs can be the same (the person is then homozygous at that locus) or diferent (the person is then heterozygous). Normally, a genotype at a given locus is shared by 5-15% of the population. A DNA profiling system consists of a selection of loci (often 17 or 20). Information about genotypes at those loci together with their frequencies is then used to estimate the frequency of a given DNA profile. On the rather uncontroversial assumption of the independence of the loci used in DNA profiling, this is usually done by multiplying probabilities for each particular genotype.
+
+However, in practice, there are complications. If people are related, they are more likely to share genotypes. Moreover, sometimes a sample from the crime scene is of low quality and only a subset of the usual loci can be used. Finally, a profile can be mixed and involve DNA sample containing material from more than one individual. For instance, if three different alleles are found at locu TH01  (say, 7,8,9), it is clear that the profile is mixed. Say now the suspect S has genotype (7,7). The complication now is that there are many possible combinations  of the DNA (and only one of them doesn't exclude the suspect):
+
+|Contributor 1 (C1) | Contributor 2  (C2)|
+| --- | --- |
+|(7,7) | (8,9)|
+|(7,8) | (8,9)|
+|(7,8) | (9,9)|
+|(7,8) | (9,9)|
+|(8,8) | (7,9)|
+
+
+
+To properly evaluate this piece of evidence, the following BN can be used:
+
+
+``` r
+DNA789 <- model2network("[S is C1][S is C2][Genotype of C1|S is C1][Genotype of C2|S is C2][S is the source|S is C1:S is C2][(7,8,9) found|Genotype of C1:Genotype of C2]")
+graphviz.plot(DNA789)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/mixedDNA.jpeg" width="100%" style="display: block; margin: auto;" />
+
+ to establish that such evidence causes only a small increase of the source hypothesis, from 50\% to 62.5\%.
 
 
 
