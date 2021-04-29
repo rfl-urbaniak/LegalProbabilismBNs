@@ -125,10 +125,29 @@ cancerBN
     ##   0 0.2 0.7
 
 ``` r
-graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5), 
-               main="marginal probabilities for the cancer BN")
+library(DiagrammeR)
+#devtools::install_github("rich-iannone/DiagrammeR")
+#devtools::install_github("rich-iannone/DiagrammeRsvg")
+library(DiagrammeRsvg)
+library(magrittr)
+library(rsvg)
+
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5),  main="marginal probabilities for the cancer BN") 
 ```
 
     ## Loading required namespace: gRain
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart-1.png" width="100%" style="display: block; margin: auto;" />
+
+A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $ $ quantitatively just in case they are compatible, and $ $ agrees with its assignment of CPTs. It can be shown that any quantitative BN represents a unique probabilistic measure. However, any probabilistic measure can be represented by multiple BNs.
+
+Here's a sketch of the argument for the last claim above, if you're interested. Skip this passage if you aren't. Take any permutation of the RVs under consideration, obtaining ![X\_1, \\dots, X\_k](https://latex.codecogs.com/png.latex?X_1%2C%20%5Cdots%2C%20X_k "X_1, \dots, X_k"). For each ![i](https://latex.codecogs.com/png.latex?i "i") find a minimal subset ![P\_i](https://latex.codecogs.com/png.latex?P_i "P_i") such that ![I\_{\\mathsf{P} {}}(\\{X\_1,\\dots,x\_{i-1}\\},X\_i\\vert P\_i)](https://latex.codecogs.com/png.latex?I_%7B%5Cmathsf%7BP%7D%20%7B%7D%7D%28%5C%7BX_1%2C%5Cdots%2Cx_%7Bi-1%7D%5C%7D%2CX_i%5Cvert%20P_i%29 "I_{\mathsf{P} {}}(\{X_1,\dots,x_{i-1}\},X_i\vert P_i)") --- that is, a minimal set of RVs which are earlier in the squence, which makes ![X\_i](https://latex.codecogs.com/png.latex?X_i "X_i") independent of all the (other) RVs which are earlier in the squence. Such a set always exists, in the worst-case scenario, it is the set of all ![X\_1,\\dots,X\_{i-1}](https://latex.codecogs.com/png.latex?X_1%2C%5Cdots%2CX_%7Bi-1%7D "X_1,\dots,X_{i-1}"). Next, make ![P\_i](https://latex.codecogs.com/png.latex?P_i "P_i") the parents of ![X\_i](https://latex.codecogs.com/png.latex?X_i "X_i") in the DAG and copy the values of $ $ into the CPTs.
+
+One reccuring pattern captures the relation between a hypothesis and a piece of evidence, the idea being that it is whether the hypothesis is true that caused the (non-)occurence of the evidence.
+
+``` r
+HE <- model2network("[Evidence|Hypothesis][Hypothesis]")
+graphviz.plot(HE)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/EHbn-1.png" width="100%" style="display: block; margin: auto;" />

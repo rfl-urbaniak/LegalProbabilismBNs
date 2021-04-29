@@ -1,4 +1,5 @@
 ---
+title:
 layout: page
 toc: true
 #title: Bayesian Networks for the Legal Probabilism SEP entry
@@ -258,13 +259,111 @@ graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart.jpeg" width="100%" style="display: block; margin: auto;" />
 
 
+### Relation between BNs and probabilistic measures
+
+
+
+A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P} $ quantitatively just in case they are compatible, and $\mathsf{P} $ agrees with its assignment of CPTs. It can be shown that any quantitative BN represents a unique probabilistic measure.  However, any probabilistic measure can be represented by multiple BNs.
+
+Here's a sketch of the argument for the last claim above, if you're interested. Skip this passage if you aren't. Take any permutation of the RVs under consideration, obtaining $X_1, \dots, X_k$. For each $i$ find a minimal subset $P_i$ such that $I_{\mathsf{P} {}}(\{X_1,\dots,x_{i-1}\},X_i\vert P_i)$ --- that is, a minimal set of RVs which are earlier in the squence, which makes $X_i$ independent of all the (other) RVs which are earlier in the squence. Such a set always exists, in the worst-case scenario, it is the set of all $X_1,\dots,X_{i-1}$. Next, make $P_i$ the parents of $X_i$ in the DAG and copy the values of $\mathsf{P} $ into the CPTs.
+
+
+The edges in a BN, intuitively, are meant to capture direct influence between RVs. The role that such direct influence plays is that in a BN any RV is conditionaly independent of its nondescentants (including ancestors), given its parents. If this is the case for a given probabilistic measure $\mathsf{P}$ and a given DAG $\mathsf{G}$, we say that $\mathsf{P}$ is compatible with $\mathsf{G}$, or that it satisfies the *Markov condition*.
+
+
+
+
+Now, why is dealing with BNs simpler? Here's a rough explanation. The *chain rule* tells us that $\mathsf{P}(A\wedge B) = \mathsf{P}(A\vert B)\mathsf{P}(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
+
+$$
+\mathsf{P}(x_1,\cdots,x_n)  = \mathsf{P}(x_n\vert x_1,\cdots,x_{n-1})\times \\
+ \mathsf{P}(x_{n-1}\vert x_1,\cdots,x_{n-2})\times \\ \nonumber
+ \times \cdots \times \mathsf{P}(x_2 \vert x_1) \mathsf{P}(x_1)
+$$
+
+So, if $\mathsf{P}$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $\mathsf{P}(X_1\dots,X_n)$ (note: this is really an assignment of probability values to \emph{all} possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side of the formula, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them.
+
+
+
+
+### D-separation and independence
+
+One last thing before we move to the construction of the BNs involved in the entry: an explanation how independence is connected with the structure of a DAG. A reader familiar with the notion of d-separation can safely skip this section.
+
+
+Since information about which RVs are independent is important (they can be dropped in calculations), so is identifying the graphical counterpart of probabilistic independence, the so-called *d-separation*.  We say that two RVs, $X$ and $Y$, are d-separated given a set of RVs $\mathsf{Z}$ --- $D(X,Y\vert \mathsf{Z})$ --- iff for every undirected path from $X$ to $Y$ there is a node $Z'$ on the path such that either:
+
+- $Z' \in \mathsf{Z}$ and there is a \emph{serial} connection, $\rightarrow Z' \rightarrow$, on the path,
+
+-  $Z'\in \mathsf{Z}$ and there is a diverging connection, $\leftarrow Z' \rightarrow $, on the path,
+
+- There is a connection $\rightarrow Z' \leftarrow$ on the path, and neither $Z'$ nor its descendants are in $\mathsf{Z}$.
+
+Finally, two sets of RVs, $\mathsf{X}$ and $\mathsf{Y}$ are d-separated given $\mathsf{Z}$ if every node in $\mathsf{X}$ is d-separated from every node in $\mathsf{Y}$ given $\mathsf{Z}$.
+
+
+With serial connection, for instance, if:
+
+
+|RV      |Proposition|
+|---     | ---       |
+|$G$|   The suspect is guilty.|
+|$B$|  The blood stain comes from the suspect.|
+|$M$|  The crime scene stain and the suspect's blood share their DNA profile.|
+
+ We naturally would like to have the connection $G \rightarrow B \rightarrow M$. If we don't know whether $B$ holds, $G$ seems to have an indirect impact on the probability of $M$. Yet, once we find out that $B$ is true, we expect the profile match, and whether $G$ holds has no further impact on the probability of $M$.
+
+
+The case of diverging connections has already been discussed when we talked about idependence. Whether a coin is fair, $F$, or not has impact on the result of the first toss, $H1$, and the result of the second toss, $H2$, and as long as we don't know whether $F$, $H1$ increases the probability of $H2$. So $H1 \leftarrow F \rightarrow H2$ seems to be appropriate. Once we know that $F$, though, $H1$ and $H2$ become independent.
+
+
+For converging connections, let  $G$ and $B$ be as above, and let:
+
+|RV    |Proposition|
+|---|   -------------|
+|$O$|   The crime scene stain comes from the offender.|
+
+ Both $G$ and $O$ influence $B$. If he's guilty, it's more likely that the blood stain comes from him, and if the blood crime stain comes from the offender it is more likely to come from the suspect (for instance, more so than if it comes from the victim). Moreover, $G$ and $O$ seem independent -- whether the suspect is guilty doesn't have any bearing on whether the stain comes from the offender. Thus, a converging connection $G\rightarrow B \leftarrow O$ seem appropriate. However, if you do find out that $B$ is true, that the stain comes from the suspect, whether the crime stain comes from the offender becomes relevant for whether the suspect is guilty.
+
+
+
+Coming back to the cancer example, $\{SH, S\}$ d-separates $PS$ from $C$, because of the first condition used in the definition of d-separation. $\{PS\}$ d-esparates $SH$ from $S$. There are two paths between these RVs. The top one goes through $PS$ and fits our second condition.  The bottom one goes through $C$ and fits the third condition. On the other hand, $\{PS, C\}$ does not d-separate $SH$ from $S$. While there is a path throuth $PS$ which satisfies the second condition, the other path  contains a connection converging on $C$, and yet $C$ is in the set on which we're conditioning.
+
+One important reason why d-separation matters is that it can be proven that if two sets of RVs are d-separated given a third one, then they are independent given the third one, for any probabilistic measures compatible with a given DAG. Interestingly, lack of d-separation doesn't entail dependence for any compatible probabilistic measure. Rather, it only allows for it: if RVs are d-separated, there is at least one probabilistic measure according to which they are independent.   So, at least, no false  independence can be inferred  from the DAG, and  all the dependencies are built into it.
+
+
+
+### BNs for legal evidence evaluation
+
+The idea that BNs can be used for probabilistic reasoning in legal fact-finding started gaining traction in late eighties ([Edwards 1991](https://heinonline.org/HOL/LandingPage?handle=hein.journals/cdozo13&div=54&id=&page=)). It gained some (albeit limited) traction with the work of many researchers, including the works of  [Neil, Fenton, and Nielsen](https://www.eecs.qmul.ac.uk/~norman/papers/building_large_scale_bbns.pdf) and [Hepler, Dawid and Leucari](https://www.researchgate.net/publication/228309715_Object-Oriented_Graphical_Representations_of_Complex_Patterns_of_Evidence), reaching a fairly advanced stage with the monograph by [Taroni, Aitken, Garbonino & Biedermann](https://www.amazon.com/Bayesian-Networks-Probabilistic-Inference-Forensic/dp/0470091738).
+
+
+One reccuring pattern captures the relation between a hypothesis and a piece of evidence, the idea being that it is whether the hypothesis is true that caused the (non-)occurence of the evidence.
+
+``` r
+HE <- model2network("[Evidence|Hypothesis][Hypothesis]")
+graphviz.plot(HE)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HE.jpeg" width="100%" style="display: block; margin: auto;" />
 
 
 
 
 
 
-### Whence simplicity?
+
+
+
+
+
+
+
+
+
+
+
+### Whence (relative) simplicity?
 
 This is a somewhat more technical explanation of how BNs help in reducing complexity. An uninterested reader can skip it.
 
@@ -367,3 +466,49 @@ P(\widehat{x}_{k}
 $$
 
 as desired.
+
+
+The *chain rule* tells us that $\mathsf{P}(A\wedge B) = \mathsf{P}(A\vert B)\mathsf{P}(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
+
+$$
+\mathsf{P}(x_1,\cdots,x_n)  = \mathsf{P}(x_n\vert x_1,\cdots,x_{n-1})\times \\
+ \mathsf{P}(x_{n-1}\vert x_1,\cdots,x_{n-2})\times \\
+ \times \cdots \times \mathsf{P}(x_2 \vert x_1) \mathsf{P}(x_1)
+$$
+
+As we already pointed out, the joint probability $\mathsf{P}(X_1\dots,X_n)$ can be represented using the conditional probabilities on the right-hand side of the formula above, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them.
+Let's slow down and take a look at the argument. Pick an ancestral ordering $X_1, \dots, X_n$, of the RVs, that is, an ordering in which if $Z$ is a descendant of $X$, $Z$ follows $Y$ in the ordering. Take any selection of values of these variables, $x_1, \dots, x_n$. Let $\mathsf{pa_i}$ be the set cotaining all the values of the parents of $X_i$ that belong to this sequence. Since this is an ancestral ordering, the parents have to occur before $x_i$. We need to prove:
+
+$$
+\mathsf{P}(x_n, x_{n-1}, \dots, x_1) = \mathsf{P}(x_n\vert \mathsf{pa_n})\mathsf{P}(x_{n-1}\vert \mathsf{pa_{n-1}})\cdots \mathsf{P}(x_1)\label{eq:markoproof1}
+$$
+
+We prove it by induction on the length of the sequence. The basic case comes for free. Now assume:
+
+$$
+\mathsf{P}(x_i, x_{i-1}, \dots, x_1 = \mathsf{P}(x_i\vert \mathsf{pa_i})\mathsf{P}(x_{i-1}\vert \mathsf{pa_{i-1}})\cdots \mathsf{P}(x_1)\label{eq:markoproof2}
+$$
+
+ we need to show:
+
+$$
+\mathsf{P}(x_{i+1}, x_{i}, \dots, x_1) = \mathsf{P}(x_{i+1}\vert \mathsf{pa_{i+1}})\mathsf{P}(x_{i}\vert \mathsf{pa_{i}})\cdots \mathsf{P}(x_1)
+$$
+
+One option is that $\mathsf{P}(x_i,x_{i-1},\dots,x)=0$. Then, also  $\mathsf{P}(x_{i+1}, x_{i}, \dots, x_1)=0$, and by the induction hypothesis, there is a $1\leq k\leq i$ such that $\mathsf{P}(x_k\vert \mathsf{pa_k})=0$, and so also the right-hand side  equals 0 and so the claim holds.
+
+Another option is that  $\mathsf{P}(x_i,x_{i-1},\dots,x)\neq 0$.
+Then we reason:
+
+$$
+\mathsf{P}(x_{i+1}, x_{i}, \dots, x_1) = \mathsf{P}(x_{i+1}\vert x_i, \dots, x_1) \mathsf{P}(x_i, \dots, x_1)\\
+ = \mathsf{P}(x_{i+1}\vert \mathsf{pa_{i+1}}) \mathsf{P}(x_i, \dots, x_1)\\
+ = \mathsf{P}(x_{i+1}\vert \mathsf{pa_{i+1}})  \mathsf{P}(x_{i}\vert \mathsf{pa_{i}})\cdots \mathsf{P}(x_1)
+$$
+
+
+ The first step is by the chain rule. The second is by the Markov  condition and the fact that we employed an ancestral ordering. The third one uses \eqref{eq:markoproof2}. This ends the proof.
+
+
+
+Computation in BNs is easier than direct calculations, but this doesn't mean it's easy. In general, the problem is NP-hard, but  efficient algorithms exist for exact calculations and for Monte Carlo estimations (which employ simulations) for certain groups of BNs. More importantly, humans are decent at identifying features of reality that seem important for a given problem, but terrible at aggregating the information they have about all of them. This is where BNs come to the rescue: a human reasoner constructs a DAG according to their theoretical preconceptions, separately specifies what they think about parent nodes and their children, and automated calculation with a BN does the rest of the job.

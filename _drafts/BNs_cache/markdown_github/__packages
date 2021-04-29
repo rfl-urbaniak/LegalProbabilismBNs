@@ -6,3 +6,7 @@ Rgraphviz
 knitr
 kableExtra
 gRbase
+DiagrammeR
+DiagrammeRsvg
+magrittr
+rsvg

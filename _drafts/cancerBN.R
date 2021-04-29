@@ -37,16 +37,16 @@ Cprob <- doubleCPT(eNode= "C", h1Node = "S", h2Node = "SH",
                    probEifH1S2H2S1 = .1,
                    probEifH1S2H2S2 = .01)
 
-
-Cprob
-
 cancerCPT <- list(PS = PSprob, S = Sprob, SH = SHprob, C = Cprob)
-
 
 cancerBN <- custom.fit(cancer2DAG,cancerCPT)
 
 
-cancerBN
+graphviz.chart(cancerBN, grid = TRUE, bg = "beige", bar.col = "black")
+
+
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.2), 
+               main="marginal probabilities for the cancer BN")
 
 
 

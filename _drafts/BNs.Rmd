@@ -107,8 +107,34 @@ cancerBN
 \vspace{1mm}
 \footnotesize
 ```{r cancerBarchart,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%", mesage = FALSE, warning = FALSE}
-graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5), 
-               main="marginal probabilities for the cancer BN")
+library(DiagrammeR)
+#devtools::install_github("rich-iannone/DiagrammeR")
+#devtools::install_github("rich-iannone/DiagrammeRsvg")
+library(DiagrammeRsvg)
+library(magrittr)
+library(rsvg)
+
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5),  main="marginal probabilities for the cancer BN") 
+
 ```
 \normalsize
+
+
+A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P} $ quantitatively just in case they are compatible, and $\mathsf{P} $ agrees with its assignment of CPTs. It can be shown that any quantitative BN represents a unique probabilistic measure.  However, any probabilistic measure can be represented by multiple BNs.
+
+Here's a sketch of the argument for the last claim above, if you're interested. Skip this passage if you aren't. Take any permutation of the RVs under consideration, obtaining $X_1, \dots, X_k$. For each $i$ find a minimal subset $P_i$ such that $I_{\mathsf{P} {}}(\{X_1,\dots,x_{i-1}\},X_i\vert P_i)$ --- that is, a minimal set of RVs which are earlier in the squence, which makes $X_i$ independent of all the (other) RVs which are earlier in the squence. Such a set always exists, in the worst-case scenario, it is the set of all $X_1,\dots,X_{i-1}$. Next, make $P_i$ the parents of $X_i$ in the DAG and copy the values of $\mathsf{P} $ into the CPTs.
+
+
+
+
+One reccuring pattern captures the relation between a hypothesis and a piece of evidence, the idea being that it is whether the hypothesis is true that caused the (non-)occurence of the evidence. 
+
+\vspace{1mm}
+\footnotesize
+```{r EHbn,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+HE <- model2network("[Evidence|Hypothesis][Hypothesis]")
+graphviz.plot(HE)
+```
+\normalsize
+
 
