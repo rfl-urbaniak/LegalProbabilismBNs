@@ -844,6 +844,161 @@ graphviz.chart(SallyClarkBN,type="barprob")
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/SCpriors.jpeg" width="100%" style="display: block; margin: auto;" />
 
 
+Now we can investigate the impact of subsequent developments.
+
+
+
+``` r
+#convert to a junction tree
+SallyClarkJN <- compile(as.grain(SallyClarkBN))
+
+#the prior of guilt
+querygrain(SallyClarkJN, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##        Yes         No
+    ## 0.07893049 0.92106951
+
+``` r
+#say bruising was found on child A:
+SallyClarkJNbra <- setEvidence(SallyClarkJN, nodes = c("Abruising"), states = c("Yes"))
+querygrain(SallyClarkJNbra, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##       Yes        No
+    ## 0.2986944 0.7013056
+
+``` r
+#say bruising is also found on child B:
+SallyClarkJNbrab <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising"),
+                                states = c("Yes","Yes"))
+querygrain(SallyClarkJNbrab, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##       Yes        No
+    ## 0.6804408 0.3195592
+
+``` r
+#if no sings of disease in children:
+SallyClarkJNbrabNoDisease <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising","Adisease","Bdisease"),
+                                states = c("Yes","Yes", "No", "No"))
+querygrain(SallyClarkJNbrabNoDisease, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##       Yes        No
+    ## 0.7018889 0.2981111
+
+
+
+    Quite crucially, the succesful appeal relied on the evidence of disease for Child A, and once we incorporate this evidence, we obtain the following situation:
+
+
+    ``` r
+    # disease in Child A
+    SallyClarkJNdiseaseA <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising","Adisease","Bdisease"), states = c("Yes","Yes", "Yes", "No"))
+    querygrain(SallyClarkJNdiseaseA, node = "Guilty")
+    ```
+
+        ## $Guilty
+        ## Guilty
+        ##        Yes         No
+        ## 0.04587482 0.95412518
+
+
+
+
+The probability of guilt drops to 4.59% and the resulting marginals are as follows:
+
+
+
+``` r
+# disease in Child A
+SallyClarkJNdiseaseA <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising","Adisease","Bdisease"), states = c("Yes","Yes", "Yes", "No"))
+querygrain(SallyClarkJNdiseaseA, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##        Yes         No
+    ## 0.04587482 0.95412518
+
+``` r
+SallyClarkFinalBN <- as.bn.fit(SallyClarkJNdiseaseA, including.evidence = TRUE)
+graphviz.chart(SallyClarkFinalBN,type="barprob", scale = c(0.7,1.3))
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/SCposterior.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+What would happen if  signs of disease were present on Child B?
+
+
+
+``` r
+SallyClarkJNdiseaseAB <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising","Adisease","Bdisease"), states = c("Yes","Yes", "Yes", "Yes"))
+querygrain(SallyClarkJNdiseaseAB, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##          Yes           No
+    ## 0.0009148263 0.9990851737
+
+
+
+### Scenarios with BNs
+
+
+
+
+Arguably, in legal contexts, it is not only individual pieces of evidence that need to be assessed, but also whole scenarios which make sense of all them and connect them to hypotheses about what happened and about the guilt of the suspect. A method for developing BNs for that purpose is has been provided  in the works of researchers such as  [Shen, Keppens, Aitken, Schafer, Lee ](https://academic.oup.com/lpr/article/5/2/87/927726),  [Bex](https://www.springer.com/gp/book/9789400701397)  and quite a few others (see our SEP entry for references).
+
+Start with collecting all relevant scenarios and deciding which guilt hypothesis node they support (making sure you use binary guilt nodes are either the same, or exclude each other). For each state and event mentioned in a scenario, and for each piece of evidence, include a binary node in the BN and connect them as appropriate.
+
+Next, add a binary scenario node as a parent of all the elements of the narration, and a guilt hypothesis node as its child. This is the *Scenario idiom*.
+The CPT for the scenario node is such that the probability of each of its child is 1 given the scenario node takes value `true`, and equals the prior probability of a given node if its \textrm{false}. The CPT for the guilt node is such that it takes value `true` if the scenario node is `true` and `false` otherwise. A simple example might look like this.
+
+
+``` r
+ScenarioBN <- model2network("[Scenario][State/event 1|Scenario][State/event 2|Scenario:State/event 1][State/event 3|Scenario:State/event 2][Guilt|Scenario][Evidence 1|State/event 1][Evidence 2|State/event 2][Evidence 3|State/event 3]")
+graphviz.plot(ScenarioBN)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/scenario.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+The advantage of adding a scenario node, supposedly, is that it keeps a narration as a coherent whole, so that now increasing the probability of one elements of the narration propagates to increase the probability of other elements of the scenario, and that it makes it possible to built a larger BN in which the interaction of multiple different narrations can be studied. WE find this debatable, but a deeper discussion is beyond the scope of what we're doing now.
+
+To merge two scenarios, first  put their corresponding BNs together. Then, if some of the nodes in the scenarios are identical, replace them with a single node (including the guilt hypothesis node), and for any nodes which exclude each other add a constraint node:
+
+``` r
+constraint <- model2network("[Constraint|Node 1:Node 2][Node 1][Node 2]")
+```
+
+ with values `allowed` and `not allowed`, setting the CPT such that the node takes value 1 just in case exatly one of the nodes takes value `true` and 0 otherwise.
+
+
+The merged scenarios might look like this:
+
+
+
+
+``` r
+ScenarioMerged <- model2network("[Scenario 1][Scenario 2][Event 1|Scenario 1][Event 2|Scenario 1:Event 1][Event 3|Scenario 2][Event 4|Scenario 2][Guilt|Scenario 1:Scenario 2][Evidence 1|Event 1][Evidence 2|Event 2][Evidence 3|Event 3][Evidence 4|Event 4]")
+graphviz.plot(ScenarioMerged)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/merging.jpeg" style="display: block; margin: auto;" />
 
 
 
@@ -852,7 +1007,7 @@ graphviz.chart(SallyClarkBN,type="barprob")
 
 
 
-
+That's pretty much it,  at least for now. An interested reader might take a look at a bunch of neat arguments related to the simplicity obtained by the use of BNs, below.
 
 
 

@@ -495,3 +495,97 @@ graphviz.chart(SallyClarkBN,type="barprob")
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+#convert to a junction tree
+SallyClarkJN <- compile(as.grain(SallyClarkBN))
+
+#the prior of guilt 
+querygrain(SallyClarkJN, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##        Yes         No 
+    ## 0.07893049 0.92106951
+
+``` r
+#say bruising was found on child A:
+SallyClarkJNbra <- setEvidence(SallyClarkJN, nodes = c("Abruising"), states = c("Yes"))
+querygrain(SallyClarkJNbra, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##       Yes        No 
+    ## 0.2986944 0.7013056
+
+``` r
+#say bruising is also found on child B:
+SallyClarkJNbrab <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising"),
+                                states = c("Yes","Yes"))
+querygrain(SallyClarkJNbrab, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##       Yes        No 
+    ## 0.6804408 0.3195592
+
+``` r
+#if no sings of disease in children:
+SallyClarkJNbrabNoDisease <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising","Adisease","Bdisease"),
+                                states = c("Yes","Yes", "No", "No"))
+querygrain(SallyClarkJNbrabNoDisease, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##       Yes        No 
+    ## 0.7018889 0.2981111
+
+``` r
+# disease in Child A
+SallyClarkJNdiseaseA <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising","Adisease","Bdisease"), states = c("Yes","Yes", "Yes", "No"))
+querygrain(SallyClarkJNdiseaseA, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##        Yes         No 
+    ## 0.04587482 0.95412518
+
+``` r
+SallyClarkFinalBN <- as.bn.fit(SallyClarkJNdiseaseA, including.evidence = TRUE)
+graphviz.chart(SallyClarkFinalBN,type="barprob", scale = c(0.7,1.3))
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+SallyClarkJNdiseaseAB <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruising","Adisease","Bdisease"), states = c("Yes","Yes", "Yes", "Yes"))
+querygrain(SallyClarkJNdiseaseAB, node = "Guilty")
+```
+
+    ## $Guilty
+    ## Guilty
+    ##          Yes           No 
+    ## 0.0009148263 0.9990851737
+
+``` r
+ScenarioBN <- model2network("[Scenario][State/event 1|Scenario][State/event 2|Scenario:State/event 1][State/event 3|Scenario:State/event 2][Guilt|Scenario][Evidence 1|State/event 1][Evidence 2|State/event 2][Evidence 3|State/event 3]")
+graphviz.plot(ScenarioBN)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-22-1.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+constraint <- model2network("[Constraint|Node 1:Node 2][Node 1][Node 2]")
+```
+
+``` r
+ScenarioMerged <- model2network("[Scenario 1][Scenario 2][Event 1|Scenario 1][Event 2|Scenario 1:Event 1][Event 3|Scenario 2][Event 4|Scenario 2][Guilt|Scenario 1:Scenario 2][Evidence 1|Event 1][Evidence 2|Event 2][Evidence 3|Event 3][Evidence 4|Event 4]")
+graphviz.plot(ScenarioMerged)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
