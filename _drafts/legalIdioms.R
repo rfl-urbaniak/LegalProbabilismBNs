@@ -14,18 +14,67 @@ HEbn = custom.fit(HE,HEcpt)
 
 # Hypothesis - two pieces of evidence
 
-HEE.dag <- model2network("[H][W|H][DNA|H]")
+HEEdag <- model2network("[H][W|H][DNA|H]")
 graphviz.plot(HEE.dag)
 
-H.prob <- array(c(0.01, 0.99), dim = 2, 
-                dimnames = list(h = c("murder","no.murder")))
+Hprob <- array(c(0.01, 0.99), dim = 2, 
+                dimnames = list(h = c("murder","nomurder")))
 
-W.prob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W= c("seen","not.seen"), H = c("murder","no.murder")))
+Wprob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W= c("seen","notseen"), H = c("murder","nomurder")))
 
-DNA.prob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
-                  dimnames = list(DNA =c("dna.match","no.match"),
-                                  H = c("murder","no.murder")))
+DNAprob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
+                  dimnames = list(DNA =c("dnamatch","nomatch"),
+                                  H = c("murder","nomurder")))
 
-HEE.cpt <- list(H=H.prob,W=W.prob,DNA = DNA.prob)
 
-HEEbn <- custom.fit(HEE.dag,HEE.cpt)
+
+HEEcpt <- list(H=Hprob,W=Wprob,DNA = DNAprob)
+
+HEEbn <- custom.fit(HEEdag,HEEcpt)
+
+# Calculating probabilities in HEE with exact inference 
+library(gRain)
+
+
+
+#convert to a junction tree for calculations
+junction <- compile(as.grain(HEEbn))
+
+#update with match and seen
+junctionMS <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","seen") )
+querygrain(junctionMS)$H
+
+
+#update with match but not seen
+junctionMN <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","notseen"))
+querygrain(junction.mn)$H
+
+
+
+#update with no match
+junctionNOMATCH <- setEvidence(junction, nodes = c("DNA"), states = c("nomatch"))
+querygrain(junctionNOMATCH)$H
+
+
+#convert to a BNs with propagation
+HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE) 
+HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE) 
+HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE) 
+
+
+
+#plot updated BNs
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  witness evidence")
+
+
+
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  negative witness evidence")
+
+
+
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  no witness evidence")
+
+

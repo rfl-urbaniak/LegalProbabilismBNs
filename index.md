@@ -338,6 +338,8 @@ One important reason why d-separation matters is that it can be proven that if t
 The idea that BNs can be used for probabilistic reasoning in legal fact-finding started gaining traction in late eighties ([Edwards 1991](https://heinonline.org/HOL/LandingPage?handle=hein.journals/cdozo13&div=54&id=&page=)). It gained some (albeit limited) traction with the work of many researchers, including the works of  [Neil, Fenton, and Nielsen](https://www.eecs.qmul.ac.uk/~norman/papers/building_large_scale_bbns.pdf) and [Hepler, Dawid and Leucari](https://www.researchgate.net/publication/228309715_Object-Oriented_Graphical_Representations_of_Complex_Patterns_of_Evidence), reaching a fairly advanced stage with the monograph by [Taroni, Aitken, Garbonino & Biedermann](https://www.amazon.com/Bayesian-Networks-Probabilistic-Inference-Forensic/dp/0470091738).
 
 
+#### Hypothesis-evidence
+
 One reccuring pattern captures the relation between a hypothesis and a piece of evidence, the idea being that it is whether the hypothesis is true that caused the (non-)occurence of the evidence.
 
 ``` r
@@ -405,6 +407,7 @@ No match
 </table>
 
 
+#### Two pieces of evidence
 
 
 
@@ -420,18 +423,20 @@ graphviz.plot(HEE.dag)
 The CPTs can, for instance,  be as follows:
 
 ``` r
-H.prob <- array(c(0.01, 0.99), dim = 2,
-                dimnames = list(h = c("murder","no.murder")))
+HEEdag <- model2network("[H][W|H][DNA|H]")
+Hprob <- array(c(0.01, 0.99), dim = 2,
+                dimnames = list(h = c("murder","nomurder")))
 
-W.prob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W=c("seen","not.seen"),
-                              H = c("murder","no.murder")))
+Wprob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames =
+              list(W= c("seen","notseen"), H = c("murder","nomurder")))
 
-DNA.prob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
-                  dimnames = list(DNA =c("dna.match","no.match"),
-                                  H = c("murder","no.murder")))
+DNAprob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
+                  dimnames = list(DNA =c("dnamatch","nomatch"),
+                                  H = c("murder","nomurder")))
 
-HEE.cpt <- list(H=H.prob,W=W.prob,DNA = DNA.prob)
-HEEbn <- custom.fit(HEE.dag,HEE.cpt)
+HEEcpt <- list(H=Hprob,W=Wprob,DNA = DNAprob)
+
+HEEbn <- custom.fit(HEEdag,HEEcpt)
 ```
 
 
@@ -549,11 +554,74 @@ DNA=no.match
 The CPT for the hypothesis contains the prior probability that a murder has been commited by the suspect. The CPTs for the other variables include (made up) probabilities of a DNA match and of a witness seeing the suspect near the crime scene at an appropriate time conditional on various states of the murder hypothesis:  $\mathsf{P} (\textrm{W=seen}\vert \textrm{H=murder})=0.7, \mathsf{P} (\textrm{W=seen}\vert \textrm{H=no.murder})=0.4$ etc.
 
 
+#### Calculating posteriors and visualising updated BNs
+
+This BN is fairly simple, yet correct intuitive assessment of how the probability of the hypothesis depends on various states of the evidence is already rather difficult. Moreover, already at this level of complexity formula-based calculations by hand also become cumbersome. In contrast, a fairly  straightforward use of a dedicated piece of software to the BN will easily lead to the following results:
+
+|DNA | W | $\mathsf{P} (H)$|
+|---  | --- |  --- |
+|match | seen | 0.9464|
+|match | not.seen | 0.8347|
+|no.match | either | 0 |
+
+But how did we get these values? Well, we first convert the BNs to junction trees for calculations, then update them with evidence, and query about the values.
+
+``` r
+library(bnlearn)
+library(gRain)
+junction <- compile(as.grain(HEEbn))
+
+junctionMS <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","seen") )
+querygrain(junctionMS)$H
+```
+
+    ## H
+    ##     murder   nomurder
+    ## 0.94645754 0.05354246
+
+``` r
+junctionMN <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","notseen"))
+querygrain(junctionMN)$H
+```
+
+    ## H
+    ##    murder  nomurder
+    ## 0.8347245 0.1652755
+
+``` r
+junctionNOMATCH <- setEvidence(junction, nodes = c("DNA"), states = c("nomatch"))
+querygrain(junctionNOMATCH)$H
+```
+
+    ## H
+    ##   murder nomurder
+    ##        0        1
 
 
 
 
 
+Moreover, we can convert the updated junction trees back to bayesian networks and use them for visualisation:
+
+
+
+
+``` r
+HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE)
+HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE)
+HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE)
+
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2),
+               main="marginal probabilities after DNA match and  witness evidence")
+
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2),
+               main="marginal probabilities after DNA match and  negative witness evidence")
+
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
+               main="marginal probabilities after DNA match and  no witness evidence")
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEms.jpeg" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEmn.jpeg" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEnomatch.jpeg" width="100%" style="display: block; margin: auto;" />
 
 
 

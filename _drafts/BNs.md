@@ -216,24 +216,26 @@ graphviz.plot(HEE.dag)
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
-The CPTs can be as follows:
+The CPTs can, for instance, as follows:
 
 ``` r
-H.prob <- array(c(0.01, 0.99), dim = 2, 
-                dimnames = list(h = c("murder","no.murder")))
+HEEdag <- model2network("[H][W|H][DNA|H]")
+Hprob <- array(c(0.01, 0.99), dim = 2, 
+                dimnames = list(h = c("murder","nomurder")))
 
-W.prob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W=              c("seen","not.seen"), H = c("murder","no.murder")))
+Wprob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W= c("seen","notseen"), H = c("murder","nomurder")))
 
-DNA.prob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
-                  dimnames = list(DNA =c("dna.match","no.match"),
-                                  H = c("murder","no.murder")))
+DNAprob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
+                  dimnames = list(DNA =c("dnamatch","nomatch"),
+                                  H = c("murder","nomurder")))
 
 
-HEE.cpt <- list(H=H.prob,W=W.prob,DNA = DNA.prob)
 
-HEEbn <- custom.fit(HEE.dag,HEE.cpt)
+HEEcpt <- list(H=Hprob,W=Wprob,DNA = DNAprob)
 
-kable(as.data.frame(H.prob),col.names="Pr(H)")
+HEEbn <- custom.fit(HEEdag,HEEcpt)
+
+kable(as.data.frame(Hprob),col.names="Pr(H)")
 ```
 
 <table>
@@ -257,7 +259,7 @@ murder
 </tr>
 <tr>
 <td style="text-align:left;">
-no.murder
+nomurder
 </td>
 <td style="text-align:right;">
 0.99
@@ -266,9 +268,9 @@ no.murder
 </tbody>
 </table>
 ``` r
-W.frame <- as.data.frame(W.prob)
-row.names(W.frame) <- c("W=seen","W=not.seen")
-kable(W.frame,col.names = c("H=murder","H=no.murder"))
+W.frame <- as.data.frame(Wprob)
+row.names(W.frame) <- c("W=seen","W=notseen")
+kable(W.frame,col.names = c("H=murder","H=nomurder"))
 ```
 
 <table>
@@ -280,7 +282,7 @@ kable(W.frame,col.names = c("H=murder","H=no.murder"))
 H=murder
 </th>
 <th style="text-align:right;">
-H=no.murder
+H=nomurder
 </th>
 </tr>
 </thead>
@@ -298,7 +300,7 @@ W=seen
 </tr>
 <tr>
 <td style="text-align:left;">
-W=not.seen
+W=notseen
 </td>
 <td style="text-align:right;">
 0.3
@@ -310,9 +312,9 @@ W=not.seen
 </tbody>
 </table>
 ``` r
-DNA.frame <- as.data.frame(DNA.prob)
-row.names(DNA.frame) <- c("DNA=match","DNA=no.match")
-kable(DNA.frame,col.names = c("H=murder","H=no.murder"))
+DNA.frame <- as.data.frame(DNAprob)
+row.names(DNA.frame) <- c("DNA=match","DNA=nomatch")
+kable(DNA.frame,col.names = c("H=murder","H=nomurder"))
 ```
 
 <table>
@@ -324,7 +326,7 @@ kable(DNA.frame,col.names = c("H=murder","H=no.murder"))
 H=murder
 </th>
 <th style="text-align:right;">
-H=no.murder
+H=nomurder
 </th>
 </tr>
 </thead>
@@ -342,7 +344,7 @@ DNA=match
 </tr>
 <tr>
 <td style="text-align:left;">
-DNA=no.match
+DNA=nomatch
 </td>
 <td style="text-align:right;">
 0
@@ -354,3 +356,51 @@ DNA=no.match
 </tbody>
 </table>
 The CPT for the hypothesis contains the prior probability that a murder has been commited by the suspect. The CPTs for the other variables include (made up) probabilities of a DNA match and of a witness seeing the suspect near the crime scene at an appropriate time conditional on various states of the murder hypothesis: ![\\mathsf{P} (\\textrm{W=seen}\\vert \\textrm{H=murder})=0.7, \\mathsf{P} (\\textrm{W=seen}\\vert \\textrm{H=no.murder})=0.4](https://latex.codecogs.com/png.latex?%5Cmathsf%7BP%7D%20%28%5Ctextrm%7BW%3Dseen%7D%5Cvert%20%5Ctextrm%7BH%3Dmurder%7D%29%3D0.7%2C%20%5Cmathsf%7BP%7D%20%28%5Ctextrm%7BW%3Dseen%7D%5Cvert%20%5Ctextrm%7BH%3Dno.murder%7D%29%3D0.4 "\mathsf{P} (\textrm{W=seen}\vert \textrm{H=murder})=0.7, \mathsf{P} (\textrm{W=seen}\vert \textrm{H=no.murder})=0.4") etc.
+
+``` r
+library(bnlearn)
+library(gRain)
+junction <- compile(as.grain(HEEbn))
+
+junctionMS <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","seen") )
+querygrain(junctionMS)$H
+```
+
+    ## H
+    ##     murder   nomurder 
+    ## 0.94645754 0.05354246
+
+``` r
+junctionMN <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","notseen"))
+querygrain(junctionMN)$H
+```
+
+    ## H
+    ##    murder  nomurder 
+    ## 0.8347245 0.1652755
+
+``` r
+junctionNOMATCH <- setEvidence(junction, nodes = c("DNA"), states = c("nomatch"))
+querygrain(junctionNOMATCH)$H
+```
+
+    ## H
+    ##   murder nomurder 
+    ##        0        1
+
+``` r
+HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE) 
+HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE) 
+HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE) 
+
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  witness evidence")
+
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  negative witness evidence")
+
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  no witness evidence")
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-3.png" width="100%" style="display: block; margin: auto;" />

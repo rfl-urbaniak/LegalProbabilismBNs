@@ -179,35 +179,55 @@ HEE.dag <- model2network("[H][W|H][DNA|H]")
 graphviz.plot(HEE.dag)
 ```
 
-The CPTs can be as follows:
+The CPTs can, for instance, as follows:
 
 ```{r,echo=TRUE,eval=TRUE, fig.width=2.5, fig.height=2.5, fig.align = "center",cache=TRUE}
-H.prob <- array(c(0.01, 0.99), dim = 2, 
-                dimnames = list(h = c("murder","no.murder")))
+HEEdag <- model2network("[H][W|H][DNA|H]")
+Hprob <- array(c(0.01, 0.99), dim = 2, 
+                dimnames = list(h = c("murder","nomurder")))
 
-W.prob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W=              c("seen","not.seen"), H = c("murder","no.murder")))
+Wprob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W= c("seen","notseen"), H = c("murder","nomurder")))
 
-DNA.prob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
-                  dimnames = list(DNA =c("dna.match","no.match"),
-                                  H = c("murder","no.murder")))
+DNAprob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
+                  dimnames = list(DNA =c("dnamatch","nomatch"),
+                                  H = c("murder","nomurder")))
 
 
-HEE.cpt <- list(H=H.prob,W=W.prob,DNA = DNA.prob)
 
-HEEbn <- custom.fit(HEE.dag,HEE.cpt)
+HEEcpt <- list(H=Hprob,W=Wprob,DNA = DNAprob)
 
-kable(as.data.frame(H.prob),col.names="Pr(H)")
-W.frame <- as.data.frame(W.prob)
-row.names(W.frame) <- c("W=seen","W=not.seen")
-kable(W.frame,col.names = c("H=murder","H=no.murder"))
-DNA.frame <- as.data.frame(DNA.prob)
-row.names(DNA.frame) <- c("DNA=match","DNA=no.match")
-kable(DNA.frame,col.names = c("H=murder","H=no.murder"))
+HEEbn <- custom.fit(HEEdag,HEEcpt)
+
+kable(as.data.frame(Hprob),col.names="Pr(H)")
+W.frame <- as.data.frame(Wprob)
+row.names(W.frame) <- c("W=seen","W=notseen")
+kable(W.frame,col.names = c("H=murder","H=nomurder"))
+DNA.frame <- as.data.frame(DNAprob)
+row.names(DNA.frame) <- c("DNA=match","DNA=nomatch")
+kable(DNA.frame,col.names = c("H=murder","H=nomurder"))
 ```
 
 The CPT for the hypothesis contains the prior probability that a murder has been commited by the suspect. The CPTs for the other variables include (made up) probabilities of a DNA match and of a witness seeing the suspect near the crime scene at an appropriate time conditional on various states of the murder hypothesis:  $\mathsf{P} (\textrm{W=seen}\vert \textrm{H=murder})=0.7, \mathsf{P} (\textrm{W=seen}\vert \textrm{H=no.murder})=0.4$ etc. 
 
 
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+library(bnlearn)
+library(gRain)
+junction <- compile(as.grain(HEEbn))
+
+junctionMS <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","seen") )
+querygrain(junctionMS)$H
+
+junctionMN <- setEvidence(junction, nodes = c("DNA","W"), states = c("dnamatch","notseen"))
+querygrain(junctionMN)$H
+
+junctionNOMATCH <- setEvidence(junction, nodes = c("DNA"), states = c("nomatch"))
+querygrain(junctionNOMATCH)$H
+
+```
+\normalsize
 
 
 
@@ -221,10 +241,22 @@ The CPT for the hypothesis contains the prior probability that a murder has been
 
 
 
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%",message = FALSE, warning = FALSE}
 
+HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE) 
+HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE) 
+HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE) 
 
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  witness evidence")
 
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  negative witness evidence")
 
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2), 
+               main="marginal probabilities after DNA match and  no witness evidence")
+```
+\normalsize
 
 
 
