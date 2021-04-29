@@ -333,7 +333,7 @@ One important reason why d-separation matters is that it can be proven that if t
 
 
 
-### BNs for legal evidence evaluation
+### Legal idioms
 
 The idea that BNs can be used for probabilistic reasoning in legal fact-finding started gaining traction in late eighties ([Edwards 1991](https://heinonline.org/HOL/LandingPage?handle=hein.journals/cdozo13&div=54&id=&page=)). It gained some (albeit limited) traction with the work of many researchers, including the works of  [Neil, Fenton, and Nielsen](https://www.eecs.qmul.ac.uk/~norman/papers/building_large_scale_bbns.pdf) and [Hepler, Dawid and Leucari](https://www.researchgate.net/publication/228309715_Object-Oriented_Graphical_Representations_of_Complex_Patterns_of_Evidence), reaching a fairly advanced stage with the monograph by [Taroni, Aitken, Garbonino & Biedermann](https://www.amazon.com/Bayesian-Networks-Probabilistic-Inference-Forensic/dp/0470091738).
 
@@ -346,6 +346,209 @@ graphviz.plot(HE)
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HE.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+For instance, $H$ might take values from the range of $1-40$, the distance in meters from which the gun has been shot, and $E$ might be a continuous variable representing the density of gun shot residues. (This example also indicates that RVs don't have to be binary for legal applications.)
+
+
+Another example, this time with binary variables, takes $H$ to be the claim that the supect is guilty and $E$ the presence of a DNA match with a crime scene stain. One way the CPTs could look like in this case is this:
+
+
+
+``` r
+Hypothesis.prob <-  array(c(0.01, 0.99), dim = 2, dimnames = list(HP =  c("guilty","not guilty")))
+
+Evidence.prob <- array(c( 0.99999, 0.00001, 0, 1), dim = c(2,2),dimnames = list(Evidence = c("DNA match","no match"),
+      Hypothesis = c("guilty","not guilty")))
+
+HEcpt <- list(Hypothesis=Hypothesis.prob,Evidence=Evidence.prob)
+HEbn = custom.fit(HE,HEcpt)
+```
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+guilty
+</th>
+<th style="text-align:right;">
+not guilty
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+DNA match
+</td>
+<td style="text-align:right;">
+0.99999
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+No match
+</td>
+<td style="text-align:right;">
+0.00001
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+The true power of BNs, however, appears when we go beyond a simple two-node situations for which calculations can be done by hand. For instance, imagine we have two pieces of evidence: a DNA match, and a witness testimony. The DAG might look like this:
+
+``` r
+HEE.dag <- model2network("[H][W|H][DNA|H]")
+graphviz.plot(HEE.dag)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEE.jpeg" style="display: block; margin: auto;" />
+
+The CPTs can, for instance,  be as follows:
+
+``` r
+H.prob <- array(c(0.01, 0.99), dim = 2,
+                dimnames = list(h = c("murder","no.murder")))
+
+W.prob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W=c("seen","not.seen"),
+                              H = c("murder","no.murder")))
+
+DNA.prob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
+                  dimnames = list(DNA =c("dna.match","no.match"),
+                                  H = c("murder","no.murder")))
+
+HEE.cpt <- list(H=H.prob,W=W.prob,DNA = DNA.prob)
+HEEbn <- custom.fit(HEE.dag,HEE.cpt)
+```
+
+
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Pr(H)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+murder
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+no.murder
+</td>
+<td style="text-align:right;">
+0.99
+</td>
+</tr>
+</tbody>
+</table>
+
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+H=murder
+</th>
+<th style="text-align:right;">
+H=no.murder
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+W=seen
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+W=not.seen
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+H=murder
+</th>
+<th style="text-align:right;">
+H=no.murder
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+DNA=match
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DNA=no.match
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.999
+</td>
+</tr>
+</tbody>
+</table>
+
+
+The CPT for the hypothesis contains the prior probability that a murder has been commited by the suspect. The CPTs for the other variables include (made up) probabilities of a DNA match and of a witness seeing the suspect near the crime scene at an appropriate time conditional on various states of the murder hypothesis:  $\mathsf{P} (\textrm{W=seen}\vert \textrm{H=murder})=0.7, \mathsf{P} (\textrm{W=seen}\vert \textrm{H=no.murder})=0.4$ etc.
+
+
 
 
 

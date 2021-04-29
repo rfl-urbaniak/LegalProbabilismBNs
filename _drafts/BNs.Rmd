@@ -138,3 +138,94 @@ graphviz.plot(HE)
 \normalsize
 
 
+
+For instance, $H$ might take values from the range of $1-40$, the distance in meters from which the gun has been shot, and $E$ might be a continuous variable representing the density of gun shot residues. (This example also indicates that RVs don't have to be binary for legal applications.) 
+
+
+Another example, this time with binary variables, takes $H$ to be the claim that the supect is guilty and $E$ the presence of a DNA match with a crime scene stain. One way the CPTs could look like in this case is this:
+
+```{r,echo=TRUE,eval=TRUE, fig.width=2, fig.height=2, fig.align = "center",cache=TRUE,message=FALSE,warning=FALSE}
+Hypothesis.prob <-  array(c(0.01, 0.99), dim = 2, dimnames = list(HP =  c("guilty","not guilty")))
+
+Evidence.prob <- array(c( 0.99999, 0.00001, 0, 1), dim = c(2,2),dimnames = list(Evidence = c("DNA match","no match"),
+      Hypothesis = c("guilty","not guilty")))
+
+HEcpt <- list(Hypothesis=Hypothesis.prob,Evidence=Evidence.prob)
+HE_bn = custom.fit(HE,HEcpt)
+Evidence.frame <- as.data.frame(Evidence.prob)
+row.names(Evidence.frame) <- c("DNA match","No match")
+kable(Evidence.frame,col.names = c("guilty","not guilty"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The true power of BNs, however, appears when we go beyond a simple two-node situations for which calculations can be done by hand. For instance, imagine we have two pieces of evidence: a DNA match, and a witness testimony. The DAG might look like this:
+
+```{r,echo=TRUE,eval=TRUE, fig.width=2, fig.height=2, fig.align = "center",cache=TRUE}
+HEE.dag <- model2network("[H][W|H][DNA|H]")
+graphviz.plot(HEE.dag)
+```
+
+The CPTs can be as follows:
+
+```{r,echo=TRUE,eval=TRUE, fig.width=2.5, fig.height=2.5, fig.align = "center",cache=TRUE}
+H.prob <- array(c(0.01, 0.99), dim = 2, 
+                dimnames = list(h = c("murder","no.murder")))
+
+W.prob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W=              c("seen","not.seen"), H = c("murder","no.murder")))
+
+DNA.prob <- array(c( 1, 0, 0.001, 0.999), dim = c(2,2),
+                  dimnames = list(DNA =c("dna.match","no.match"),
+                                  H = c("murder","no.murder")))
+
+
+HEE.cpt <- list(H=H.prob,W=W.prob,DNA = DNA.prob)
+
+HEEbn <- custom.fit(HEE.dag,HEE.cpt)
+
+kable(as.data.frame(H.prob),col.names="Pr(H)")
+W.frame <- as.data.frame(W.prob)
+row.names(W.frame) <- c("W=seen","W=not.seen")
+kable(W.frame,col.names = c("H=murder","H=no.murder"))
+DNA.frame <- as.data.frame(DNA.prob)
+row.names(DNA.frame) <- c("DNA=match","DNA=no.match")
+kable(DNA.frame,col.names = c("H=murder","H=no.murder"))
+```
+
+The CPT for the hypothesis contains the prior probability that a murder has been commited by the suspect. The CPTs for the other variables include (made up) probabilities of a DNA match and of a witness seeing the suspect near the crime scene at an appropriate time conditional on various states of the murder hypothesis:  $\mathsf{P} (\textrm{W=seen}\vert \textrm{H=murder})=0.7, \mathsf{P} (\textrm{W=seen}\vert \textrm{H=no.murder})=0.4$ etc. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
