@@ -777,7 +777,7 @@ graphviz.plot(DNA789)
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/mixedDNA.jpeg" width="100%" style="display: block; margin: auto;" />
 
- to establish that such evidence causes only a small increase of the source hypothesis, from 50\% to 62.5\%.
+ to establish that such evidence causes only a small increase of the source hypothesis, from 50% to 62.5%.
 
 
 
@@ -789,13 +789,24 @@ A BN can be used also at a more general level, to clearly investigate the intera
 
 
 ``` r
-SallyClarkDAG <- model2network("[Abruising|Acause][Adisease|Acause][Bbruising|Bcause][Bdisease|Bcause][Acause][Bcause|Acause][Nomurdered|Acause:Bcause][Guilty|Nomurdered]")
+SallyClarkDAG <- model2network("[Abruising|Acause][Adisease|Acause][Bbruising|Bcause][Bdisease|Bcause][Acause][Bcause|Acause][NoMurdered|Acause:Bcause][Guilty|NoMurdered]")
 
 graphviz.plot(SallyClarkDAG)
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/sallyClark.jpeg" width="100%" style="display: block; margin: auto;" />
 
+
+| Node | Corresponding RV |
+| --- | ----|
+| Abruising | Was bruising found on child A?|
+| Bbruising | Was bruising  found on child B?|
+| Acause    | Was the cause of death of child A natural?|
+| Bcause    | Was the cause of death of child B natural?|
+| Adisease | Were any sings of potentially lethal disease found in child A?|
+| Bdisease | Were any sings of potentially lethal disease found in child B?|
+| NoMurdered| How many children were murdered?|
+|Guilty | Is Sally Clark responsible for any of these deaths?|
 
 
 
