@@ -281,7 +281,7 @@ $$
  \times \cdots \times \mathsf{P}(x_2 \vert x_1) \mathsf{P}(x_1)
 $$
 
-So, if $\mathsf{P}$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $\mathsf{P}(X_1\dots,X_n)$ (note: this is really an assignment of probability values to \emph{all} possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side of the formula, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them.
+So, if $\mathsf{P}$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $\mathsf{P}(X_1\dots,X_n)$ (note: this is really an assignment of probability values to *all* possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side of the formula, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them.
 
 
 
@@ -293,7 +293,7 @@ One last thing before we move to the construction of the BNs involved in the ent
 
 Since information about which RVs are independent is important (they can be dropped in calculations), so is identifying the graphical counterpart of probabilistic independence, the so-called *d-separation*.  We say that two RVs, $X$ and $Y$, are d-separated given a set of RVs $\mathsf{Z}$ --- $D(X,Y\vert \mathsf{Z})$ --- iff for every undirected path from $X$ to $Y$ there is a node $Z'$ on the path such that either:
 
-- $Z' \in \mathsf{Z}$ and there is a \emph{serial} connection, $\rightarrow Z' \rightarrow$, on the path,
+- $Z' \in \mathsf{Z}$ and there is a *serial* connection, $\rightarrow Z' \rightarrow$, on the path,
 
 -  $Z'\in \mathsf{Z}$ and there is a diverging connection, $\leftarrow Z' \rightarrow $, on the path,
 
@@ -666,8 +666,8 @@ graphviz.plot(Measurement)
 
 
 
-We already discussed one idiom: \emph{The Evidence Idiom}, which simply consists of a hypothesis node, and various pieces of evidence related to it as its children.
-The legal variant of the Measurement Idiom is called the \emph{Evidence Accuracy Idiom}, and its instantiation might look like this:
+We already discussed one idiom: *The Evidence Idiom*, which simply consists of a hypothesis node, and various pieces of evidence related to it as its children.
+The legal variant of the Measurement Idiom is called the *Evidence Accuracy Idiom*, and its instantiation might look like this:
 
 
 ### Evidence accuracy, opportunity
