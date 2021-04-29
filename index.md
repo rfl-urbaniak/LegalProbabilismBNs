@@ -625,6 +625,41 @@ graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
 
 
 
+#### Cause, measurement
+
+
+The *Cause-Consequence Idiom* models a causal process in terms of the relationship between a cause and its consequence.
+
+
+``` r
+CauseCon <-  model2network("[Cause][Consequence|Cause]")
+graphviz.plot(CauseCon)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/CauseConsequence.jpeg" style="display: block; margin: auto;" />
+
+
+
+In fact, a BN fragment for a hypothesis-evidence relationship often instantiates this idiom, because often there is a causal relationship between the hypothesis and the evidence.
+
+The *Measurement Idiom* is used to represent the uncertainty arising from the way a given variable is measured.
+
+``` r
+Measurement <- model2network("[Accuracy][Actual value][Observed value|Accuracy:Actual value]")
+graphviz.plot(Measurement)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/Measurement.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -404,3 +404,17 @@ graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-3.png" width="100%" style="display: block; margin: auto;" />
+
+``` r
+CauseCon <-  model2network("[Cause][Consequence|Cause]")
+graphviz.plot(CauseCon)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
+``` r
+Measurement <- model2network("[Accuracy][Actual value][Observed value|Accuracy:Actual value]")
+graphviz.plot(Measurement)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />

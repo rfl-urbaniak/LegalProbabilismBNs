@@ -259,5 +259,19 @@ graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
 \normalsize
 
 
+```{r,echo=TRUE,eval=TRUE, fig.width=2, fig.height=2, fig.align = "center",cache=TRUE}
+CauseCon <-  model2network("[Cause][Consequence|Cause]")
+graphviz.plot(CauseCon)
+```
+
+
+
+\vspace{1mm}
+\footnotesize
+```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
+Measurement <- model2network("[Accuracy][Actual value][Observed value|Accuracy:Actual value]")
+graphviz.plot(Measurement)
+```
+\normalsize
 
 
