@@ -123,3 +123,12 @@ cancerBN
     ## SH    1   0
     ##   1 0.8 0.3
     ##   0 0.2 0.7
+
+``` r
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5), 
+               main="marginal probabilities for the cancer BN")
+```
+
+    ## Loading required namespace: gRain
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart-1.png" width="100%" style="display: block; margin: auto;" />

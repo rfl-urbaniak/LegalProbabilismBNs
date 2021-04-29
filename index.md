@@ -46,8 +46,6 @@ Then load the libraries we use (you need to have them installed first):
 ``` r
 library(bnlearn)
 library(Rgraphviz)
-library(knitr)
-library(kableExtra)
 ```
 
 
@@ -150,8 +148,6 @@ With the intended reading:
 This can be achieved in a somewhat simpler manner like this:
 
 
-This can be achieved in a somewhat simpler manner like this:
-
 ``` r
 cancer2DAG <- model2network("[SH|PS][PS][S|PS][C|SH:S]")
 graphviz.plot(cancer2DAG)
@@ -167,9 +163,9 @@ The edges, intuitively, are meant to capture direct influence between RVs. The r
 
 ### Adding conditional probability tables (CPTs) to obtain BNs
 
-A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P}$ quantitatively just in case they are compatible, and $\pr$ agrees with its assignment of CPTs.
+A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P}$ quantitatively just in case they are compatible, and $\mathsf{P}$ agrees with its assignment of CPTs.
 
-Adding probabilities to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script (in needs to be in your folder), then, remember that `E` stands for the child, and `H` for a parent.
+Adding probabilities to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script (in needs to be in your folder), then, remember that `E` stands for the child, and `H` for a parent. We assume states are binary, and so `S1` corresponds to a state occuring and `S2` to it failing to occur. So, for instance, if we have `h1Node = "S", h2Node = "SH"` then `probEifH1S1H2S1 = .6` means the probability of the child note (`E`) if the first hypothesis (`S`) is true (`S1`) and the second hypothesis (`SH`) is true as well (`S1`).
 
 ``` r
 source("cptCreate.R")
@@ -246,8 +242,22 @@ cancerBN
 How do you read this?
 
 - Let's look at the  parameters of node `PS` first. The table tells you that the prior probability of at least one parent smoking is .3.
+
 - For `S` and `SH` the table is 2-dimensional; the tables tell you the probabilies of various states of these nodes conditional on the state of the single parent node. For instance, the probability  that the patient smokes given that at least one of their parents smokes is .4, while the probability that a patient is a second-hand smoker given that their parents smoke is .8 (and .3 otherwise).
 
+- The table for `C` is three-dimensional, so $\mathsf{R}$ splits it onto layers. In one, we assume the subject is a second-hand smoker (`SH=1`), and in the second layer that they are not (`SH=0`). In each layer, the conditonal probability of `C` given two possible states of `S` is given.
+
+The BN can be plotted with the resulting *marginal* probabilties as follows:
+
+
+``` r
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5),
+               main="marginal probabilities for the cancer BN")
+```
+
+    ## Loading required namespace: gRain
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart-1.png" width="100%" style="display: block; margin: auto;" />
 
 
 

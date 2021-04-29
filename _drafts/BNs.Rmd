@@ -104,4 +104,11 @@ cancerBN
 ```
 \normalsize
 
+\vspace{1mm}
+\footnotesize
+```{r cancerBarchart,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%", mesage = FALSE, warning = FALSE}
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5), 
+               main="marginal probabilities for the cancer BN")
+```
+\normalsize
 
