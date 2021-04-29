@@ -781,6 +781,59 @@ graphviz.plot(DNA789)
 
 
 
+### A BN for the Sally Clark cases
+
+
+
+A BN can be used also at a more general level, to clearly investigate the interaction between various pieces of evidence involved in a case. For instance, a simple BN for the Sally Clark original trial looks like this:
+
+
+``` r
+SallyClarkDAG <- model2network("[Abruising|Acause][Adisease|Acause][Bbruising|Bcause][Bdisease|Bcause][Acause][Bcause|Acause][Nomurdered|Acause:Bcause][Guilty|Nomurdered]")
+
+graphviz.plot(SallyClarkDAG)
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/sallyClark.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
+
+
+Now, let's add CPTs and graph the marginal probabilites prior to obtaining any evidence:
+
+``` r
+#CPTs as used in Fenton & al.
+
+AcauseProb <-prior.CPT("Acause","SIDS","Murder",0.921659)
+AbruisingProb <- single.CPT("Abruising","Acause","Yes","No","SIDS","Murder",0.01,0.05)
+AdiseaseProb <- single.CPT("Adisease","Acause","Yes","No","SIDS","Murder",0.05,0.001)
+BbruisingProb <- single.CPT("Bbruising","Bcause","Yes","No","SIDS","Murder",0.01,0.05)
+BdiseaseProb <- single.CPT("Bdisease","Bcause","Yes","No","SIDS","Murder",0.05,0.001)
+BcauseProb <- single.CPT("Bcause","Acause","SIDS","Murder","SIDS","Murder",0.9993604,1-0.9998538)
+
+#E goes first; order: last variable through levels, second last, then first
+NoMurderedProb <- array(c(0, 0, 1, 0, 1, 0, 0,1,0,1,0,0), dim = c(3, 2, 2),dimnames = list(NoMurdered = c("both","one","none"),Bcause = c("SIDS","Murder"), Acause = c("SIDS","Murder")))
+
+#this one is definitional
+GuiltyProb <-  array(c( 1,0, 1,0, 0,1), dim = c(2,3),dimnames = list(Guilty = c("Yes","No"), NoMurdered = c("both","one","none")))
+
+# Put CPTs together
+SallyClarkCPT <- list(Acause=AcauseProb,Adisease = AdiseaseProb,
+                      Bcause = BcauseProb,Bdisease=BdiseaseProb,
+                      Abruising = AbruisingProb,Bbruising = BbruisingProb,
+                      NoMurdered = NoMurderedProb,Guilty=GuiltyProb)
+
+# join with the DAG to get a BN
+SallyClarkBN <- custom.fit(SallyClarkDAG,SallyClarkCPT)
+
+graphviz.chart(SallyClarkBN,type="barprob")
+```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/SCpriors.jpeg" width="100%" style="display: block; margin: auto;" />
+
+
+
 
 
 
