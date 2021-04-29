@@ -255,9 +255,7 @@ graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale
                main="marginal probabilities for the cancer BN")
 ```
 
-    ## Loading required namespace: gRain
-
-<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart.jpeg" width="100%" style="display: block; margin: auto;" />
 
 
 
