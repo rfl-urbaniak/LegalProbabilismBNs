@@ -194,5 +194,15 @@ SallyClarkJNdiseaseAB <- setEvidence(SallyClarkJN, nodes = c("Abruising","Bbruis
 querygrain(SallyClarkJNdiseaseAB, node = "Guilty")
 
 
+#a simple scenario
+ScenarioBN <- model2network("[Scenario][State/event 1|Scenario][State/event 2|Scenario:State/event 1][State/event 3|Scenario:State/event 2][Guilt|Scenario][Evidence 1|State/event 1][Evidence 2|State/event 2][Evidence 3|State/event 3]")
+graphviz.plot(ScenarioBN)
 
+
+#constraint
+constraint <- model2network("[Constraint|Node 1:Node 2][Node 1][Node 2]")
+
+#merging
+ScenarioMerged <- model2network("[Scenario 1][Scenario 2][Event 1|Scenario 1][Event 2|Scenario 1:Event 1][Event 3|Scenario 2][Event 4|Scenario 2][Guilt|Scenario 1:Scenario 2][Evidence 1|Event 1][Evidence 2|Event 2][Evidence 3|Event 3][Evidence 4|Event 4]")
+graphviz.plot(ScenarioMerged)
 
