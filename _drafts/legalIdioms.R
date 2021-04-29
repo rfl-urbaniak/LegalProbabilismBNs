@@ -64,17 +64,17 @@ HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE)
 
 
 #plot updated BNs
-graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2), 
-               main="marginal probabilities after DNA match and  witness evidence")
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(1.5,1.5), 
+               main="DNA match and  witness evidence")
 
 
 
-graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2), 
-               main="marginal probabilities after DNA match and  negative witness evidence")
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(1.5,1.5), 
+               main="DNA match and negative witness evidence")
 
 
 
-graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2), 
-               main="marginal probabilities after DNA match and  no witness evidence")
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(1.5,1.5), 
+               main="DNA match and  no witness evidence")
 
 
