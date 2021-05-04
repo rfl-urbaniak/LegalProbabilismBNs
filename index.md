@@ -14,7 +14,29 @@ output:
 
 The *Legal Probabilism* entry in the Stanford Encyclopedia of Philosophy by [Marcello Di Bello](https://www.marcellodibello.com/) and yours truly) includes a section on Bayesian Networks. Here, we provide more details and source code in R for those examples.
 
-The folder containing  $\textsf{R}$ files containing bare code for the BNs is available HERE.
+- If you just want to get the code, here is [the folder](https://github.com/rfl-urbaniak/LegalProbabilismBNs/tree/gh-pages/code) with  $\textsf{R}$ files containing bare code for the BNs and the wrapper functions.
+
+- If you prefer to look at the code with some explanation of what's going on and why, read on, feel free to skip the last section.
+
+- If you're interested in a few words of a more theoretical explanation, read the last  section.
+
+### Recommended readings
+
+Before we move on, if you're interested in BNs, here are three really good sources to get you started:
+
+- ["Bayesian Networks and Probabilistic Inference in Forensic Science"](https://www.wiley.com/en-cg/Bayesian+Networks+for+Probabilistic+Inference+and+Decision+Analysis+in+Forensic+Science,+2nd+Edition-p-9780470979730) by Taroni, Aitken, Garbolino and Biedermann. This is clearly the one with forensic science in the focus.
+
+- For the more mathematically minded, ["Learning Bayesian Networks"](https://www.amazon.com/Learning-Bayesian-Networks-Richard-Neapolitan/dp/0130125342) by Neapolitan is pretty awesome.
+
+- For a very accessible and fascinating account of the multiplicity of applications of Bayesian Neworks, check our ["Risk Assessment and Decision Analysis with Bayesian Networks"](https://www.routledge.com/Risk-Assessment-and-Decision-Analysis-with-Bayesian-Networks/Fenton-Neil/p/book/9781138035119) by Fenton and Neil.
+
+
+
+They don't contain R code, though. For a great treatment on the use of `bnlearn` package, read ["Bayesian Networks
+With Examples in R"](https://www.routledge.com/Bayesian-Networks-With-Examples-in-R/Scutari-Denis/p/book/9781482225587) by Marco Scutari and  Jean-Baptiste Denis.
+
+
+
 
 **Contents**
 * TOC
@@ -49,38 +71,6 @@ library(bnlearn)
 library(Rgraphviz)
 ```
 
-
-
-
-
-### Probabilistic intro
-
-
-While Bayes's Theorem is of immense use when it comes to calculating various conditional probabilities, if we're interested in the interaction of multiple hypotheses at various levels and multiple pieces of evidence, calculations quickly become inconvenient, to say the least. Moreover, if such considerations are to be presented to a fact-finder, it is rather unlikely that they would be transparent and easily understood. Luckily, a tool exist to make such tasks easier. Bayesian networks (BNs) can be used for a fairly transparent and computationally more manageable evalation and presentation of the interaction of multiple pieces of evidence and hypotheses. We'll start with a general presentation of BNs, and then go over a few main methods of employing BNs in presentation, aggregation and evaluation of evidence in legal fact-finding.
-
-
-A *random variable* (RV) $X$ is a function from the elements of a sample space into $\mathbb{R}$, the set of real numbers. For instance, if our sample space is the set of all potential outcomes of tossing a fair coin four times (each such outcome can be represented as a sequence, for instance  $HHHT$, or $HTHT$), $X$ can be the number of heads among the tosses.
-
-Given a probability measure $P$, two events $A$ and $B$ are conditionally independent given another event $C$, $I_{P}(A,B\vert C)$, just in case $P(A\wedge B\vert C) = P(A\vert C)P(B \vert C)$. Conditional and unconditional independence don't have to coincide. If you toss twice a coin which is fair with probability $\frac{1}{2}$, and $\frac{3}{4}$ biased towards heads with probability $\frac{1}{2}$, the result of the second toss is not independent of the first one. After all, if the first result is heads, this increases the probability that the coin is biased, and so increases the probability of heads in the second toss. On the other hand, conditionally on knowledge whether the coin is fair, the results are independent. If the coin is fair, the probability of heads in the second toss is $\frac{1}{2}$ and if the coin is biased, it is $\frac{3}{4}$, no matter what the first result was. And in the opposite direction, indepedence can disappear when we condition. Say I have two friends, Alice and Peter, who call me regularly, but they decide to do so independently. Then, whether they call in five minutes is independent. Now, suppose the phone rings. Conditional on the phone ringing, I know that if it isn't Alice, it's Peter, and so the identities of the callers are no longer independent.
-
-
-
-
-
-Two RVs $X$ and $Y$ are conditionally independent given another RV $Z$, $I_{P}(X,Y\vert Z)$ just in case for any combination of values of these RVs $x,y,z$ it is the case that $I_{P}(X=x \wedge Y=y \vert Z=z)$ (notice: $X,Y$ and $Z$ are RVs, while $x,y$ and $z$ are some particular values they can take). The notion naturally generalizes to sets of RVs.
-Often, instead of saying things like $P(X_1 = x_1\wedge Y_5=y_5 \vert Z_3=z_3)$ we'll rather say $P(x_1,y_5\vert z_3)$.
-
-
-Now, if we have $n$ RVs, even if we assume for simplicity that they're binary (that is, they can take only one of two values), there are $2^n$ possible combinations of values they could take, and so a direct description of a probability measure for them would require $2^n-1$ numbers. This would be a highly unfeasible method of specifying a probability distribution for a set of random variables.
-
-
-
-Moreover, even if we had specified the joint probability distribution for all our combinations of values of Rvs $X, Y, Z$, using it wouldn't be the most efficient way of calculating conditional probabilities or the probability that a certain selected RV takes a certain particular value. For instance, we would have to rely on:
-
-$$xP(x_1\vert y_1)  =  \frac{P(x_1,y_1)}{P(y_1)}   = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
-\sum_{i,j}P(X=x_j,y_1,Z=Z_i)}$$
-
- in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need $2^{99}$ terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few unconditional ones.
 
 
 ### Qualitative BNs (DAGs with node labels)
@@ -257,80 +247,6 @@ graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart.jpeg" width="100%" style="display: block; margin: auto;" />
-
-
-### Relation between BNs and probabilistic measures
-
-
-
-A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P} $ quantitatively just in case they are compatible, and $\mathsf{P} $ agrees with its assignment of CPTs. It can be shown that any quantitative BN represents a unique probabilistic measure.  However, any probabilistic measure can be represented by multiple BNs.
-
-Here's a sketch of the argument for the last claim above, if you're interested. Skip this passage if you aren't. Take any permutation of the RVs under consideration, obtaining $X_1, \dots, X_k$. For each $i$ find a minimal subset $P_i$ such that $I_{\mathsf{P} {}}(\{X_1,\dots,x_{i-1}\},X_i\vert P_i)$ --- that is, a minimal set of RVs which are earlier in the squence, which makes $X_i$ independent of all the (other) RVs which are earlier in the squence. Such a set always exists, in the worst-case scenario, it is the set of all $X_1,\dots,X_{i-1}$. Next, make $P_i$ the parents of $X_i$ in the DAG and copy the values of $\mathsf{P} $ into the CPTs.
-
-
-The edges in a BN, intuitively, are meant to capture direct influence between RVs. The role that such direct influence plays is that in a BN any RV is conditionaly independent of its nondescentants (including ancestors), given its parents. If this is the case for a given probabilistic measure $\mathsf{P}$ and a given DAG $\mathsf{G}$, we say that $\mathsf{P}$ is compatible with $\mathsf{G}$, or that it satisfies the *Markov condition*.
-
-
-
-
-Now, why is dealing with BNs simpler? Here's a rough explanation. The *chain rule* tells us that $\mathsf{P}(A\wedge B) = \mathsf{P}(A\vert B)\mathsf{P}(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
-
-$$
-\mathsf{P}(x_1,\cdots,x_n)  = \mathsf{P}(x_n\vert x_1,\cdots,x_{n-1})\times \\
- \mathsf{P}(x_{n-1}\vert x_1,\cdots,x_{n-2})\times \\ \nonumber
- \times \cdots \times \mathsf{P}(x_2 \vert x_1) \mathsf{P}(x_1)
-$$
-
-So, if $\mathsf{P}$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $\mathsf{P}(X_1\dots,X_n)$ (note: this is really an assignment of probability values to *all* possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side of the formula, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them.
-
-
-
-
-### D-separation and independence
-
-One last thing before we move to the construction of the BNs involved in the entry: an explanation how independence is connected with the structure of a DAG. A reader familiar with the notion of d-separation can safely skip this section.
-
-
-Since information about which RVs are independent is important (they can be dropped in calculations), so is identifying the graphical counterpart of probabilistic independence, the so-called *d-separation*.  We say that two RVs, $X$ and $Y$, are d-separated given a set of RVs $\mathsf{Z}$ --- $D(X,Y\vert \mathsf{Z})$ --- iff for every undirected path from $X$ to $Y$ there is a node $Z'$ on the path such that either:
-
-- $Z' \in \mathsf{Z}$ and there is a *serial* connection, $\rightarrow Z' \rightarrow$, on the path,
-
--  $Z'\in \mathsf{Z}$ and there is a diverging connection, $\leftarrow Z' \rightarrow $, on the path,
-
-- There is a connection $\rightarrow Z' \leftarrow$ on the path, and neither $Z'$ nor its descendants are in $\mathsf{Z}$.
-
-Finally, two sets of RVs, $\mathsf{X}$ and $\mathsf{Y}$ are d-separated given $\mathsf{Z}$ if every node in $\mathsf{X}$ is d-separated from every node in $\mathsf{Y}$ given $\mathsf{Z}$.
-
-
-With serial connection, for instance, if:
-
-
-|RV      |Proposition|
-|---     | ---       |
-|$G$|   The suspect is guilty.|
-|$B$|  The blood stain comes from the suspect.|
-|$M$|  The crime scene stain and the suspect's blood share their DNA profile.|
-
- We naturally would like to have the connection $G \rightarrow B \rightarrow M$. If we don't know whether $B$ holds, $G$ seems to have an indirect impact on the probability of $M$. Yet, once we find out that $B$ is true, we expect the profile match, and whether $G$ holds has no further impact on the probability of $M$.
-
-
-The case of diverging connections has already been discussed when we talked about idependence. Whether a coin is fair, $F$, or not has impact on the result of the first toss, $H1$, and the result of the second toss, $H2$, and as long as we don't know whether $F$, $H1$ increases the probability of $H2$. So $H1 \leftarrow F \rightarrow H2$ seems to be appropriate. Once we know that $F$, though, $H1$ and $H2$ become independent.
-
-
-For converging connections, let  $G$ and $B$ be as above, and let:
-
-|RV    |Proposition|
-|---|   -------------|
-|$O$|   The crime scene stain comes from the offender.|
-
- Both $G$ and $O$ influence $B$. If he's guilty, it's more likely that the blood stain comes from him, and if the blood crime stain comes from the offender it is more likely to come from the suspect (for instance, more so than if it comes from the victim). Moreover, $G$ and $O$ seem independent -- whether the suspect is guilty doesn't have any bearing on whether the stain comes from the offender. Thus, a converging connection $G\rightarrow B \leftarrow O$ seem appropriate. However, if you do find out that $B$ is true, that the stain comes from the suspect, whether the crime stain comes from the offender becomes relevant for whether the suspect is guilty.
-
-
-
-Coming back to the cancer example, $\{SH, S\}$ d-separates $PS$ from $C$, because of the first condition used in the definition of d-separation. $\{PS\}$ d-esparates $SH$ from $S$. There are two paths between these RVs. The top one goes through $PS$ and fits our second condition.  The bottom one goes through $C$ and fits the third condition. On the other hand, $\{PS, C\}$ does not d-separate $SH$ from $S$. While there is a path throuth $PS$ which satisfies the second condition, the other path  contains a connection converging on $C$, and yet $C$ is in the set on which we're conditioning.
-
-One important reason why d-separation matters is that it can be proven that if two sets of RVs are d-separated given a third one, then they are independent given the third one, for any probabilistic measures compatible with a given DAG. Interestingly, lack of d-separation doesn't entail dependence for any compatible probabilistic measure. Rather, it only allows for it: if RVs are d-separated, there is at least one probabilistic measure according to which they are independent.   So, at least, no false  independence can be inferred  from the DAG, and  all the dependencies are built into it.
-
 
 
 ### Legal idioms
@@ -1010,9 +926,125 @@ graphviz.plot(ScenarioMerged)
 That's pretty much it,  at least for now. An interested reader might take a look at a bunch of neat arguments related to the simplicity obtained by the use of BNs, below.
 
 
+### Mathy details
+
+#### Probabilistic background
 
 
-### Whence (relative) simplicity?
+While Bayes's Theorem is of immense use when it comes to calculating various conditional probabilities, if we're interested in the interaction of multiple hypotheses at various levels and multiple pieces of evidence, calculations quickly become inconvenient, to say the least. Moreover, if such considerations are to be presented to a fact-finder, it is rather unlikely that they would be transparent and easily understood. Luckily, a tool exist to make such tasks easier. Bayesian networks (BNs) can be used for a fairly transparent and computationally more manageable evalation and presentation of the interaction of multiple pieces of evidence and hypotheses. We'll start with a general presentation of BNs, and then go over a few main methods of employing BNs in presentation, aggregation and evaluation of evidence in legal fact-finding.
+
+
+A *random variable* (RV) $X$ is a function from the elements of a sample space into $\mathbb{R}$, the set of real numbers. For instance, if our sample space is the set of all potential outcomes of tossing a fair coin four times (each such outcome can be represented as a sequence, for instance  $HHHT$, or $HTHT$), $X$ can be the number of heads among the tosses.
+
+Given a probability measure $P$, two events $A$ and $B$ are conditionally independent given another event $C$, $I_{P}(A,B\vert C)$, just in case $P(A\wedge B\vert C) = P(A\vert C)P(B \vert C)$. Conditional and unconditional independence don't have to coincide. If you toss twice a coin which is fair with probability $\frac{1}{2}$, and $\frac{3}{4}$ biased towards heads with probability $\frac{1}{2}$, the result of the second toss is not independent of the first one. After all, if the first result is heads, this increases the probability that the coin is biased, and so increases the probability of heads in the second toss. On the other hand, conditionally on knowledge whether the coin is fair, the results are independent. If the coin is fair, the probability of heads in the second toss is $\frac{1}{2}$ and if the coin is biased, it is $\frac{3}{4}$, no matter what the first result was. And in the opposite direction, indepedence can disappear when we condition. Say I have two friends, Alice and Peter, who call me regularly, but they decide to do so independently. Then, whether they call in five minutes is independent. Now, suppose the phone rings. Conditional on the phone ringing, I know that if it isn't Alice, it's Peter, and so the identities of the callers are no longer independent.
+
+
+
+
+
+Two RVs $X$ and $Y$ are conditionally independent given another RV $Z$, $I_{P}(X,Y\vert Z)$ just in case for any combination of values of these RVs $x,y,z$ it is the case that $I_{P}(X=x \wedge Y=y \vert Z=z)$ (notice: $X,Y$ and $Z$ are RVs, while $x,y$ and $z$ are some particular values they can take). The notion naturally generalizes to sets of RVs.
+Often, instead of saying things like $P(X_1 = x_1\wedge Y_5=y_5 \vert Z_3=z_3)$ we'll rather say $P(x_1,y_5\vert z_3)$.
+
+
+Now, if we have $n$ RVs, even if we assume for simplicity that they're binary (that is, they can take only one of two values), there are $2^n$ possible combinations of values they could take, and so a direct description of a probability measure for them would require $2^n-1$ numbers. This would be a highly unfeasible method of specifying a probability distribution for a set of random variables.
+
+
+
+Moreover, even if we had specified the joint probability distribution for all our combinations of values of Rvs $X, Y, Z$, using it wouldn't be the most efficient way of calculating conditional probabilities or the probability that a certain selected RV takes a certain particular value. For instance, we would have to rely on:
+
+$$xP(x_1\vert y_1)  =  \frac{P(x_1,y_1)}{P(y_1)}   = \frac{\sum_{i}P(x_1,y_1,Z=z_i)}{
+\sum_{i,j}P(X=x_j,y_1,Z=Z_i)}$$
+
+ in which calculations we'd have to travel through all possible values of $Z$ and $X$ -- this would become even less feasible as the number of RVs and their possible values increase. With 100 binary RVs we'd need $2^{99}$ terms in the sum in the denominator, so it seems that to be able to calculate a single conditional probability we'd have to elicit quite a few unconditional ones.
+
+
+
+
+
+#### Relation between BNs and probabilistic measures
+
+
+
+ A quantitative BN (further on, simply BN) is a DAG with CPTs, and we say that it *represents* a probabilistic measure $\mathsf{P} $ quantitatively just in case they are compatible, and $\mathsf{P} $ agrees with its assignment of CPTs. It can be shown that any quantitative BN represents a unique probabilistic measure.  However, any probabilistic measure can be represented by multiple BNs.
+
+ Here's a sketch of the argument for the last claim above, if you're interested. Skip this passage if you aren't. Take any permutation of the RVs under consideration, obtaining $X_1, \dots, X_k$. For each $i$ find a minimal subset $P_i$ such that $I_{\mathsf{P} {}}(\{X_1,\dots,x_{i-1}\},X_i\vert P_i)$ --- that is, a minimal set of RVs which are earlier in the squence, which makes $X_i$ independent of all the (other) RVs which are earlier in the squence. Such a set always exists, in the worst-case scenario, it is the set of all $X_1,\dots,X_{i-1}$. Next, make $P_i$ the parents of $X_i$ in the DAG and copy the values of $\mathsf{P} $ into the CPTs.
+
+
+ The edges in a BN, intuitively, are meant to capture direct influence between RVs. The role that such direct influence plays is that in a BN any RV is conditionaly independent of its nondescentants (including ancestors), given its parents. If this is the case for a given probabilistic measure $\mathsf{P}$ and a given DAG $\mathsf{G}$, we say that $\mathsf{P}$ is compatible with $\mathsf{G}$, or that it satisfies the *Markov condition*.
+
+
+
+
+ Now, why is dealing with BNs simpler? Here's a rough explanation. The *chain rule* tells us that $\mathsf{P}(A\wedge B) = \mathsf{P}(A\vert B)\mathsf{P}(B)$. Its application to RVs (say the RVs in G are $X_1,\dots X_n$) yields:
+
+ $$
+ \mathsf{P}(x_1,\cdots,x_n)  = \mathsf{P}(x_n\vert x_1,\cdots,x_{n-1})\times \\
+  \mathsf{P}(x_{n-1}\vert x_1,\cdots,x_{n-2})\times \\ \nonumber
+  \times \cdots \times \mathsf{P}(x_2 \vert x_1) \mathsf{P}(x_1)
+ $$
+
+ So, if $\mathsf{P}$ is compatible with $\mathsf{G}$, we don't have to represent it directly by listing all the $2^n-1$ values. Instead, the joint probability $\mathsf{P}(X_1\dots,X_n)$ (note: this is really an assignment of probability values to *all* possible combinations of the values of these RVs), can be represented using the conditional probabilities on the right-hand side of the formula, and moreover, for each conditional probability of an RVs $X$ given some other RVs, non-parents of $X$ can be removed from the condition, since RVs are independent of them.
+
+
+
+
+
+
+
+#### D-separation and independence
+
+An explanation how independence is connected with the structure of a DAG. A reader familiar with the notion of d-separation can safely skip this section.
+
+
+ Since information about which RVs are independent is important (they can be dropped in calculations), so is identifying the graphical counterpart of probabilistic independence, the so-called *d-separation*.  We say that two RVs, $X$ and $Y$, are d-separated given a set of RVs $\mathsf{Z}$ --- $D(X,Y\vert \mathsf{Z})$ --- iff for every undirected path from $X$ to $Y$ there is a node $Z'$ on the path such that either:
+
+ - $Z' \in \mathsf{Z}$ and there is a *serial* connection, $\rightarrow Z' \rightarrow$, on the path,
+
+ -  $Z'\in \mathsf{Z}$ and there is a diverging connection, $\leftarrow Z' \rightarrow $, on the path,
+
+ - There is a connection $\rightarrow Z' \leftarrow$ on the path, and neither $Z'$ nor its descendants are in $\mathsf{Z}$.
+
+ Finally, two sets of RVs, $\mathsf{X}$ and $\mathsf{Y}$ are d-separated given $\mathsf{Z}$ if every node in $\mathsf{X}$ is d-separated from every node in $\mathsf{Y}$ given $\mathsf{Z}$.
+
+
+ With serial connection, for instance, if:
+
+
+ |RV      |Proposition|
+ |---     | ---       |
+ |$G$|   The suspect is guilty.|
+ |$B$|  The blood stain comes from the suspect.|
+ |$M$|  The crime scene stain and the suspect's blood share their DNA profile.|
+
+  We naturally would like to have the connection $G \rightarrow B \rightarrow M$. If we don't know whether $B$ holds, $G$ seems to have an indirect impact on the probability of $M$. Yet, once we find out that $B$ is true, we expect the profile match, and whether $G$ holds has no further impact on the probability of $M$.
+
+
+ The case of diverging connections has already been discussed when we talked about idependence. Whether a coin is fair, $F$, or not has impact on the result of the first toss, $H1$, and the result of the second toss, $H2$, and as long as we don't know whether $F$, $H1$ increases the probability of $H2$. So $H1 \leftarrow F \rightarrow H2$ seems to be appropriate. Once we know that $F$, though, $H1$ and $H2$ become independent.
+
+
+ For converging connections, let  $G$ and $B$ be as above, and let:
+
+ |RV    |Proposition|
+ |---|   -------------|
+ |$O$|   The crime scene stain comes from the offender.|
+
+  Both $G$ and $O$ influence $B$. If he's guilty, it's more likely that the blood stain comes from him, and if the blood crime stain comes from the offender it is more likely to come from the suspect (for instance, more so than if it comes from the victim). Moreover, $G$ and $O$ seem independent -- whether the suspect is guilty doesn't have any bearing on whether the stain comes from the offender. Thus, a converging connection $G\rightarrow B \leftarrow O$ seem appropriate. However, if you do find out that $B$ is true, that the stain comes from the suspect, whether the crime stain comes from the offender becomes relevant for whether the suspect is guilty.
+
+
+
+ Coming back to the cancer example, $\{SH, S\}$ d-separates $PS$ from $C$, because of the first condition used in the definition of d-separation. $\{PS\}$ d-esparates $SH$ from $S$. There are two paths between these RVs. The top one goes through $PS$ and fits our second condition.  The bottom one goes through $C$ and fits the third condition. On the other hand, $\{PS, C\}$ does not d-separate $SH$ from $S$. While there is a path throuth $PS$ which satisfies the second condition, the other path  contains a connection converging on $C$, and yet $C$ is in the set on which we're conditioning.
+
+ One important reason why d-separation matters is that it can be proven that if two sets of RVs are d-separated given a third one, then they are independent given the third one, for any probabilistic measures compatible with a given DAG. Interestingly, lack of d-separation doesn't entail dependence for any compatible probabilistic measure. Rather, it only allows for it: if RVs are d-separated, there is at least one probabilistic measure according to which they are independent.   So, at least, no false  independence can be inferred  from the DAG, and  all the dependencies are built into it.
+
+
+
+
+
+
+
+
+
+#### Whence (relative) simplicity?
 
 This is a somewhat more technical explanation of how BNs help in reducing complexity. An uninterested reader can skip it.
 
