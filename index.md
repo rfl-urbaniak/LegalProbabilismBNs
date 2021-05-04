@@ -670,7 +670,7 @@ We already discussed one idiom: *The Evidence Idiom*, which simply consists of a
 The legal variant of the Measurement Idiom is called the *Evidence Accuracy Idiom*, and its instantiation might look like this:
 
 
-### Evidence accuracy, opportunity
+#### Evidence accuracy, opportunity
 
 We already discussed the evidence idiom, which simply consists of a hypothesis node, and various pieces of evidence related to it as its children.  The legal variant of the Measurement Idiom is called the *Evidence Accuracy Idiom*, and its instantiation might look like this:
 
@@ -781,7 +781,7 @@ graphviz.plot(DNA789)
 
 
 
-### A BN for the Sally Clark cases
+### A BN for the Sally Clark case
 
 
 
