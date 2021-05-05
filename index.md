@@ -35,6 +35,7 @@ Before we move on, if you're interested in BNs, here are three really good sourc
 - They don't contain R code, though. For a great treatment on the use of `bnlearn` package, read ["Bayesian Networks
 With Examples in R"](https://www.routledge.com/Bayesian-Networks-With-Examples-in-R/Scutari-Denis/p/book/9781482225587) by Marco Scutari and  Jean-Baptiste Denis.
 
+He
 
 
 
@@ -573,8 +574,8 @@ graphviz.plot(Measurement)
 
 
 ``` r
-Measurement <- model2network("[Accuracy][Actual value][Observed value|Accuracy:Actual value]")
-graphviz.plot(Measurement)
+Definitional <- model2network("[Distance][Time][Velocity|Distance:Time]")
+graphviz.plot(Definitional)
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/Definitional.jpeg" width="100%" style="display: block; margin: auto;" />
