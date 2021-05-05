@@ -23,7 +23,7 @@ plugins:             [jekyll-paginate, jekyll-sitemap, jekyll-feed, jekyll-seo-t
 
 # Customise atom feed settings (this is where Jekyll-Feed gets configuration information)
 title:		           'Legal Probabilism BNs with R'
-description:	       '</br> by Rafal Urbaniak'
+description:	       '</br> by [Rafal Urbaniak](https://rfl-urbaniak.github.io/menu/about.html)'
 author:              'Rafal Urbaniak'
 
 # RSS 2.0 can be used instead of Atom by uncommenting following two lines
