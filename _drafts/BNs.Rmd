@@ -10,7 +10,7 @@ output:
 ---
 
 ```{r , echo = FALSE, eval = TRUE}
-knitr::opts_knit$set(base.dir = "/home/rafal/L2/L2projects/LegalProbabilismBNs", 
+knitr::opts_knit$set(base.dir = "/home/rafal/L2/L2projects/LegalProbabilismBNs",
 base.url = "https://rfl-urbaniak.github.io/LegalProbabilismBNs/")
 knitr::opts_chunk$set(fig.path = "images/")
 ```
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(fig.path = "images/")
 
 ### Set-up
 
-The examples are given in R code, which we intertwine with additional explanations, which the reader is welcome to skip if they look familiar. 
+The examples are given in R code, which we intertwine with additional explanations, which the reader is welcome to skip if they look familiar.
 
 First, you need to install the relevant R libraries. This is a bit tricky, because some of them have to be installed through BiocManager. One way to go is this:
 
@@ -76,7 +76,7 @@ graphviz.plot(cancer2DAG)
 
 
 
-Adding probabilties to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script, then, remember that `E` stands for the child, and `H` for a parent. 
+Adding probabilties to the DAG we already have can be achieved easily using a bunch of wrappers we wrote for root nodes, and single- and double-parented nodes. First, load the script, then, remember that `E` stands for the child, and `H` for a parent.
 
 \vspace{1mm}
 \footnotesize
@@ -84,7 +84,7 @@ Adding probabilties to the DAG we already have can be achieved easily using a bu
 source("cptCreate.R")
 
 #tables for separate nodes
-PSprob <- priorCPT("PS",prob1 = .3) 
+PSprob <- priorCPT("PS",prob1 = .3)
 
 Sprob <-  singleCPT(eNode = "S", hNode = "PS", probEifHS1 = .4 , probEifHS2 =  .2)
 SHprob <- singleCPT(eNode = "SH", hNode = "PS", probEifHS1 = .8, probEifHS2 = .3)
@@ -114,7 +114,7 @@ library(DiagrammeRsvg)
 library(magrittr)
 library(rsvg)
 
-graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5),  main="marginal probabilities for the cancer BN") 
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5),  main="marginal probabilities for the cancer BN")
 
 ```
 \normalsize
@@ -127,7 +127,7 @@ Here's a sketch of the argument for the last claim above, if you're interested. 
 
 
 
-One reccuring pattern captures the relation between a hypothesis and a piece of evidence, the idea being that it is whether the hypothesis is true that caused the (non-)occurence of the evidence. 
+One reccuring pattern captures the relation between a hypothesis and a piece of evidence, the idea being that it is whether the hypothesis is true that caused the (non-)occurence of the evidence.
 
 \vspace{1mm}
 \footnotesize
@@ -139,7 +139,7 @@ graphviz.plot(HE)
 
 
 
-For instance, $H$ might take values from the range of $1-40$, the distance in meters from which the gun has been shot, and $E$ might be a continuous variable representing the density of gun shot residues. (This example also indicates that RVs don't have to be binary for legal applications.) 
+For instance, $H$ might take values from the range of $1-40$, the distance in meters from which the gun has been shot, and $E$ might be a continuous variable representing the density of gun shot residues. (This example also indicates that RVs don't have to be binary for legal applications.)
 
 
 Another example, this time with binary variables, takes $H$ to be the claim that the supect is guilty and $E$ the presence of a DNA match with a crime scene stain. One way the CPTs could look like in this case is this:
@@ -183,7 +183,7 @@ The CPTs can, for instance, as follows:
 
 ```{r,echo=TRUE,eval=TRUE, fig.width=2.5, fig.height=2.5, fig.align = "center",cache=TRUE}
 HEEdag <- model2network("[H][W|H][DNA|H]")
-Hprob <- array(c(0.01, 0.99), dim = 2, 
+Hprob <- array(c(0.01, 0.99), dim = 2,
                 dimnames = list(h = c("murder","nomurder")))
 
 Wprob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W= c("seen","notseen"), H = c("murder","nomurder")))
@@ -207,7 +207,7 @@ row.names(DNA.frame) <- c("DNA=match","DNA=nomatch")
 kable(DNA.frame,col.names = c("H=murder","H=nomurder"))
 ```
 
-The CPT for the hypothesis contains the prior probability that a murder has been commited by the suspect. The CPTs for the other variables include (made up) probabilities of a DNA match and of a witness seeing the suspect near the crime scene at an appropriate time conditional on various states of the murder hypothesis:  $\mathsf{P} (\textrm{W=seen}\vert \textrm{H=murder})=0.7, \mathsf{P} (\textrm{W=seen}\vert \textrm{H=no.murder})=0.4$ etc. 
+The CPT for the hypothesis contains the prior probability that a murder has been commited by the suspect. The CPTs for the other variables include (made up) probabilities of a DNA match and of a witness seeing the suspect near the crime scene at an appropriate time conditional on various states of the murder hypothesis:  $\mathsf{P} (\textrm{W=seen}\vert \textrm{H=murder})=0.7, \mathsf{P} (\textrm{W=seen}\vert \textrm{H=no.murder})=0.4$ etc.
 
 
 \vspace{1mm}
@@ -243,17 +243,17 @@ querygrain(junctionNOMATCH)$H
 
 ```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%",message = FALSE, warning = FALSE}
 
-HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE) 
-HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE) 
-HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE) 
+HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE)
+HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE)
+HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE)
 
-graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2), 
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2),
                main="marginal probabilities after DNA match and  witness evidence")
 
-graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2), 
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2),
                main="marginal probabilities after DNA match and  negative witness evidence")
 
-graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2), 
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
                main="marginal probabilities after DNA match and  no witness evidence")
 ```
 \normalsize
@@ -284,7 +284,6 @@ graphviz.plot(Definitional)
 
 
 \vspace{1mm}
-\footnotesize
 ```{r,echo=TRUE,eval=TRUE,fig.align = "center",cache=TRUE, fig.show = "hold", out.width = "100%"}
 evidenceAccuracy <-  model2network("[Accuracy of evidence][Excess alcohol level][Evidence for excess|Accuracy of evidence:Excess alcohol level]")
 graphviz.plot(evidenceAccuracy)
@@ -382,7 +381,7 @@ graphviz.chart(SallyClarkBN,type="barprob")
 #convert to a junction tree
 SallyClarkJN <- compile(as.grain(SallyClarkBN))
 
-#the prior of guilt 
+#the prior of guilt
 querygrain(SallyClarkJN, node = "Guilty")
 
 
@@ -444,5 +443,3 @@ constraint <- model2network("[Constraint|Node 1:Node 2][Node 1][Node 2]")
 ScenarioMerged <- model2network("[Scenario 1][Scenario 2][Event 1|Scenario 1][Event 2|Scenario 1:Event 1][Event 3|Scenario 2][Event 4|Scenario 2][Guilt|Scenario 1:Scenario 2][Evidence 1|Event 1][Evidence 2|Event 2][Evidence 3|Event 3][Evidence 4|Event 4]")
 graphviz.plot(ScenarioMerged)
 ```
-
-
