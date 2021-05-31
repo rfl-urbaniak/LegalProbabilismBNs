@@ -1,5 +1,5 @@
 ---
-title:
+title: " "
 layout: page
 toc: true
 #title: Bayesian Networks for the Legal Probabilism SEP entry
