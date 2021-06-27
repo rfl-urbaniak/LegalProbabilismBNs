@@ -1,5 +1,5 @@
 ---
-title:
+title: " "
 layout: page
 toc: true
 #title: Bayesian Networks for the Legal Probabilism SEP entry
@@ -12,7 +12,7 @@ output:
 
 ### Brief description
 
-The *Legal Probabilism* entry in the Stanford Encyclopedia of Philosophy by [Marcello Di Bello](https://www.marcellodibello.com/) and yours truly) includes a section on Bayesian Networks. Here, we provide more details and source code in R for those examples.
+The [Legal Probabilism entry in the Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/entries/legal-probabilism/) which I co-authored with  [Marcello Di Bello](https://www.marcellodibello.com/) includes a section on Bayesian Networks. Here, I provide more details and source code in R for those examples.
 
 - If you just want to get the code, here is [the folder](https://github.com/rfl-urbaniak/LegalProbabilismBNs/tree/gh-pages/code) with  $\textsf{R}$ files containing bare code for the BNs and the wrapper functions.
 
