@@ -138,7 +138,6 @@ graphviz.plot(SallyClarkDAG)
 
 
 #CPTs as used in Fenton & al.
-
 AcauseProb <-prior.CPT("Acause","SIDS","Murder",0.921659)
 AbruisingProb <- single.CPT("Abruising","Acause","Yes","No","SIDS","Murder",0.01,0.05)
 AdiseaseProb <- single.CPT("Adisease","Acause","Yes","No","SIDS","Murder",0.05,0.001)
