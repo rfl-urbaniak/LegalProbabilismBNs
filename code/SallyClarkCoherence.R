@@ -5,16 +5,19 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 BiocManager::install()
 BiocManager::install(c("graph", "Rgraphviz"))
-
+BiocManager::install(c("graph", "RBGL", "Rgraphviz"))
 install.packages("https://www.bnlearn.com/releases/bnlearn_latest.tar.gz", 
                  repos = NULL, type = "source")
 
 
+install.packages("gRbase", dependencies=TRUE); 
+install.packages("gRain", dependencies=TRUE); 
+install.packages("gRim", dependencies=TRUE)
 library(bnlearn)
 library(Rgraphviz)
 library(gRain)
 
-
+getwd()
 source("utils//CombinationsBN.R")
 source("utils//CptCreate.R")
 source("utils//LogicAndBNs.R")
@@ -28,7 +31,7 @@ source("measures//Olsson.R")
 source("measures//generalizedShogenji.R")
 source("measures//Shogenji.R")
 source("measures//Roche.R")
-source("measures//RA.R")
+#source("measures//RA.R")
 Z <- function(posterior,prior){
   d <- posterior - prior
   ifelse(prior == posterior, 0, ifelse(posterior > prior, d/(1-prior), d/prior))
@@ -75,8 +78,8 @@ SCnodes <- c("Acause","Bcause")
 
 SCstates <- list(c("SIDS","SIDS"), c("Murder", "Murder"), c("SIDS", "Murder"), c("Murder", "SIDS"))
 
-SCtable <- CoherencesTable(SallyClarkBN), scenariosList = SCnodes,
-          statesList = SCstates, exampleName = "Sally Clark")
+SCtable <- CoherencesTable(SallyClarkBN, scenariosList = SCnodes,
+          statesList = c("SIDS","SIDS"), exampleName = "Sally Clark")
 
 
 
