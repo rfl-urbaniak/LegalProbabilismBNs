@@ -12,7 +12,7 @@ output:
 
 ### Brief description
 
-The [entry on Legal Probabilism in the Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/entries/legal-probabilism/) which I co-authored with  [Marcello Di Bello](https://www.marcellodibello.com/) includes a section on Bayesian Networks. Here, I provide more details and source code in R for those examples.
+The entry on [Legal Probabilism](https://plato.stanford.edu/entries/legal-probabilism/) in the Stanford Encyclopedia of Philosophy which I co-authored with  [Marcello Di Bello](https://www.marcellodibello.com/) includes a section on Bayesian Networks. Here, I provide more details and source code in R for those examples.
 
 - If you just want to get the code, here is [the folder](https://github.com/rfl-urbaniak/LegalProbabilismBNs/tree/gh-pages/code) with  $\textsf{R}$ files containing bare code for the BNs and the wrapper functions.
 
