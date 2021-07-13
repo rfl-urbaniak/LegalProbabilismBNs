@@ -23,7 +23,7 @@ plugins:             [jekyll-paginate, jekyll-sitemap, jekyll-feed, jekyll-seo-t
 
 # Customise atom feed settings (this is where Jekyll-Feed gets configuration information)
 title:		           'Legal Probabilism with Bayesian Networks and R'
-description:	       '</br> A Stanford Encyclopedia of Philosophy entry spin-off </br>'
+description:	       ''
 author:              'Rafal Urbaniak'
 
 # RSS 2.0 can be used instead of Atom by uncommenting following two lines
