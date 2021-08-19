@@ -33,7 +33,7 @@ Before we move on, if you're interested in BNs, here are three really good sourc
 
 
 - They don't contain R code, though. For a great treatment on the use of `bnlearn` package, read ["Bayesian Networks
-With Examples in R"](https://www.routledge.com/Bayesian-Networks-With-Examples-in-R/Scutari-Denis/p/book/9781482225587) by Marco Scutari and  Jean-Baptiste Denis.
+With Examples in R"](https://www.routledge.com/Bayesian-Networks-With-Examples-in-R/Scutari-Denis/p/book/9780367366513?gclid=CjwKCAjwgviIBhBkEiwA10D2j4-slVB4tX6klSdB5oX43COgpHRm1AN7Jsklez7DG4fEHm56r2Rd3hoCk7EQAvD_BwE) by Marco Scutari and  Jean-Baptiste Denis.
 
 
 
@@ -77,7 +77,7 @@ library(Rgraphviz)
 
 
 
-Instead, we start with representing dependencies between RVs in such a set by means of a *directed acyclic graph* (DAG). A DAG is a collection of *nodes* (called also *vertices*) -- think of them as corresponding to the RVs, *directed edges* (also called *arcs*; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$. (Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.) A *qualitative BN* (QBN) is a DAG with nodes labeled by RVs.
+Instead, we start with representing dependencies between random variables in such a set by means of a *directed acyclic graph* (DAG). A DAG is a collection of *nodes* (called also *vertices*) -- think of them as corresponding to the RVs, *directed edges* (also called *arcs*; they  can be thought of as ordered pairs of nodes), such that there is no sequence of nodes $v_0,\dots, v_k$ with edges from $v_i$ to $v_{i+1}$ for $0\leq i\leq k-1$ with $v_0=v_k$. (Sometimes it is also required that the graph should be connected: that for any two nodes there is an undirected path between them.) A *qualitative BN* (QBN) is a DAG with nodes labeled by RVs.
 
 
 Here's one example of a QBN:
