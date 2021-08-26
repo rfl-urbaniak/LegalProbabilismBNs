@@ -537,10 +537,9 @@ graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
                main="Exclusionary DNA match and  no witness evidence")
 ```
 
-<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-3.png" width="100%" style="display: block; margin: auto;" />
 
 
-<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEms.jpeg" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEmn.jpeg" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEnomatch.jpeg" width="100%" style="display: block; margin: auto;" />
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEms2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEmn2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEnomatch2.png" width="100%" style="display: block; margin: auto;" />
 
 
 
