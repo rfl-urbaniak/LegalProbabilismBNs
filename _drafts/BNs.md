@@ -58,7 +58,7 @@ Adding probabilties to the DAG we already have can be achieved easily using a bu
 source("cptCreate.R")
 
 #tables for separate nodes
-PSprob <- priorCPT("PS",prob1 = .3) 
+PSprob <- priorCPT("PS",prob1 = .3)
 
 Sprob <-  singleCPT(eNode = "S", hNode = "PS", probEifHS1 = .4 , probEifHS2 =  .2)
 SHprob <- singleCPT(eNode = "SH", hNode = "PS", probEifHS1 = .8, probEifHS2 = .3)
@@ -132,10 +132,8 @@ library(DiagrammeRsvg)
 library(magrittr)
 library(rsvg)
 
-graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5),  main="marginal probabilities for the cancer BN") 
+graphviz.chart(cancerBN, grid = FALSE, type = "barprob", layout = "neato", scale = c(1,1.5),  main="marginal probabilities for the cancer BN")
 ```
-
-    ## Loading required namespace: gRain
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/cancerBarchart-1.png" width="100%" style="display: block; margin: auto;" />
 
@@ -220,7 +218,7 @@ The CPTs can, for instance, as follows:
 
 ``` r
 HEEdag <- model2network("[H][W|H][DNA|H]")
-Hprob <- array(c(0.01, 0.99), dim = 2, 
+Hprob <- array(c(0.01, 0.99), dim = 2,
                 dimnames = list(h = c("murder","nomurder")))
 
 Wprob <- array(c( 0.7, 0.3, 0.4, 0.6), dim = c(2,2),dimnames = list(W= c("seen","notseen"), H = c("murder","nomurder")))
@@ -389,18 +387,21 @@ querygrain(junctionNOMATCH)$H
     ##        0        1
 
 ``` r
-HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE) 
-HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE) 
-HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE) 
+HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE)
+HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE)
+HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE)
 
-graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2), 
-               main="marginal probabilities after DNA match and  witness evidence")
 
-graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2), 
-               main="marginal probabilities after DNA match and  negative witness evidence")
 
-graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2), 
-               main="marginal probabilities after DNA match and  no witness evidence")
+
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2),
+               main="DNA match and  witness evidence")
+
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2),
+               main="DNA match and  negative witness evidence")
+
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
+               main="Exlcusionary DNA evidence and  no witness evidence")
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-3.png" width="100%" style="display: block; margin: auto;" />
@@ -500,7 +501,7 @@ graphviz.chart(SallyClarkBN,type="barprob")
 #convert to a junction tree
 SallyClarkJN <- compile(as.grain(SallyClarkBN))
 
-#the prior of guilt 
+#the prior of guilt
 querygrain(SallyClarkJN, node = "Guilty")
 ```
 

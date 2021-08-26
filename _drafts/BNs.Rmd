@@ -48,7 +48,7 @@ library(kableExtra)
 
 
 
-While Bayes's Theorem is of immense use when it comes to calculating various conditional probabilities, if we're interested in the interaction of multiple hypotheses at various levels and multiple pieces of evidence, calculations quickly become inconvenient, to say the least. Moreover, if such considerations are to be presented to a fact-finder, it is rather unlikely that they would be transparent and easily understood. Luckily, a tool exist to make such tasks easier. Bayesian networks (BNs) can be used for a fairly transparent and computationally more manageable evalation and presentation of the interaction of multiple pieces of evidence and hypotheses. We'll start with a general presentation of BNs, and then go over a few main methods of employing BNs in presentation, aggregation and evaluation of evidence in legal fact-finding.  
+While Bayes's Theorem is of immense use when it comes to calculating various conditional probabilities, if we're interested in the interaction of multiple hypotheses at various levels and multiple pieces of evidence, calculations quickly become inconvenient, to say the least. Moreover, if such considerations are to be presented to a fact-finder, it is rather unlikely that they would be transparent and easily understood. Luckily, a tool exist to make such tasks easier. Bayesian networks (BNs) can be used for a fairly transparent and computationally more manageable evalation and presentation of the interaction of multiple pieces of evidence and hypotheses. We'll start with a general presentation of BNs, and then go over a few main methods of employing BNs in presentation, aggregation and evaluation of evidence in legal fact-finding.
 
 
 
@@ -248,13 +248,13 @@ HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE)
 HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE)
 
 graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="marginal probabilities after DNA match and  witness evidence")
+               main="DNA match and  witness evidence")
 
 graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="marginal probabilities after DNA match and  negative witness evidence")
+               main="DNA match and  negative witness evidence")
 
 graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="marginal probabilities after DNA match and  no witness evidence")
+               main="Exlusionary DNA evidence and  no witness evidence")
 ```
 \normalsize
 

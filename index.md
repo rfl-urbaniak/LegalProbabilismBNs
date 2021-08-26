@@ -18,7 +18,7 @@ The entry on [Legal Probabilism](https://plato.stanford.edu/entries/legal-probab
 
 - If you prefer to look at the code with some explanation of what's going on and why, read on, feel free to skip the last section.
 
-- If you're interested in a few words of a more theoretical explanation, read the last  section.
+- If you're interested in a few words of a more theoretical explanation, read the last  section with mathy details first.
 
 ### Recommended readings
 
@@ -536,6 +536,9 @@ graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2),
 graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
                main="marginal probabilities after DNA match and  no witness evidence")
 ```
+
+<img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-3.png" width="100%" style="display: block; margin: auto;" />
+
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEms.jpeg" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEmn.jpeg" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/HEEnomatch.jpeg" width="100%" style="display: block; margin: auto;" />
 
