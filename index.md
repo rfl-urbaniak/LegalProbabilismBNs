@@ -528,13 +528,13 @@ HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE)
 HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE)
 
 graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="marginal probabilities after DNA match and  witness evidence")
+               main=" DNA match and  witness evidence")
 
 graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="marginal probabilities after DNA match and  negative witness evidence")
+               main="DNA match and  negative witness evidence")
 
 graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="marginal probabilities after DNA match and  no witness evidence")
+               main="Exclusionary DNA match and  no witness evidence")
 ```
 
 <img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-2.png" width="100%" style="display: block; margin: auto;" /><img src="https://rfl-urbaniak.github.io/LegalProbabilismBNs/images/unnamed-chunk-8-3.png" width="100%" style="display: block; margin: auto;" />
