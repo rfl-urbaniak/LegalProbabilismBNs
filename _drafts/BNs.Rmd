@@ -247,14 +247,36 @@ HEEms <- as.bn.fit(junctionMS, including.evidence = TRUE)
 HEEmn <- as.bn.fit(junctionMN, including.evidence = TRUE)
 HEEnomatch <- as.bn.fit(junctionNOMATCH, including.evidence = TRUE)
 
-graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="DNA match and  witness evidence")
+getwd()
+png(file="../images/HEEms2.png", 
+    units="in", 
+    width=6, 
+    height=6, 
+    pointsize = 1,
+    res=400)
+graphviz.chart(HEEms, grid = FALSE, type = "barprob",  scale = c(2,2))
+dev.off()
 
-graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="DNA match and  negative witness evidence")
 
-graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2),
-               main="Exlusionary DNA evidence and  no witness evidence")
+getwd()
+png(file="../images/HEEmn2.png", 
+    units="in", 
+    width=6, 
+    height=6, 
+    pointsize = 1,
+    res=400)
+graphviz.chart(HEEmn, grid = FALSE, type = "barprob",  scale = c(2,2))
+dev.off()
+
+png(file="../images/HEEnomatch2.png", 
+    units="in", 
+    width=6, 
+    height=6, 
+    pointsize = 1,
+    res=400)
+graphviz.chart(HEEnomatch, grid = FALSE, type = "barprob",  scale = c(2,2))
+dev.off()
+
 ```
 \normalsize
 
