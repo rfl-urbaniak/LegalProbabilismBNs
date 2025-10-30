@@ -14,6 +14,8 @@ output:
 
 The entry on [Legal Probabilism](https://plato.stanford.edu/entries/legal-probabilism/) in the Stanford Encyclopedia of Philosophy which I co-authored with  [Marcello Di Bello](https://www.marcellodibello.com/) includes a   <a href="https://plato.stanford.edu/entries/legal-probabilism/#BayeNetwForLegaAppl" target="_blank">section</a>  on Bayesian networks. Here, I provide more details and source code in R for  the examples discussed in that section.
 
+This work was funded by the National Science Center (grant no. 2021/41/B/HS1/01814).
+
 - If you just want to get the code, here is [the folder](https://github.com/rfl-urbaniak/LegalProbabilismBNs/tree/gh-pages/code) with  $\textsf{R}$ files containing bare code for the BNs and the wrapper functions.
 
 - If you prefer to look at the code with some explanation of what's going on and why, read on, feel free to skip the last section.
